@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Added viewport-fit=cover for iPhone notches -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>SWOOSH | Modern Glass Couture</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Montserrat:wght@100;200;300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Theme inverted for dark background / Glassmorphism */
+      --text-main: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.6);
+      --glass-panel: rgba(255, 255, 255, 0.03); /* Luminous translucent panel */
+      --glass-border: rgba(255, 255, 255, 0.08);
+      
+      --font-luxury: 'Cinzel', serif;
+      --font-clean: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #000000;
+      /* INTEGRATING THE BACKGROUND PICTURE */
+      background-image: url('swoosh-backround-image-2.jpg');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      background-attachment: fixed;
+      
+      color: var(--text-main);
+      font-family: var(--font-clean);
+      /* Modified to 100dvh for dynamic mobile browsers */
+      min-height: 100dvh; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%; /* Prevents auto text resizing in mobile */
+    }
+
+    /* Fixed Minimalist Navbar */
+    .luxury-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      /* Added safe-area-inset for iPhone notch */
+      padding: calc(30px + env(safe-area-inset-top)) 6% 30px 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      border-bottom: 1px solid var(--glass-border);
+      background: rgba(10, 10, 10, 0.4);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+    }
+
+    .brand-logo {
+      font-family: var(--font-luxury);
+      font-size: 1.6rem;
+      font-weight: 500;
+      letter-spacing: 12px;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-main);
+      transition: opacity 0.3s ease;
+    }
+
+    .nav-meta-link {
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    /* main centered container */
+    .lookbook-wrapper {
+      padding-top: 120px; /* Clearance for header */
+      padding-bottom: 50px;
+      width: 100%;
+      padding-left: 20px;
+      padding-right: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex: 1;
+    }
+
+    /* CENTER-ALIGNED GLASS MENU PANEL */
+    .category-directory-pane {
+      background-color: var(--glass-panel);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 60px;
+      width: 100%;
+      max-width: 600px; /* bounds the center matrix */
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      
+      /* Subtle shadow for depth on image */
+      box-shadow: 0 20px 60px rgba(0, 15, 67, 0.4);
+    }
+    
+    .directory-meta-title {
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 8px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      text-align: center;
+      width: 100%;
+    }
+
+    .menu-container {
+      list-style: none;
+      width: 100%;
+    }
+
+    .menu-row {
+      position: relative;
+      width: 100%;
+      text-align: center;
+    }
+
+    .menu-anchor {
+      display: flex;
+      align-items: center;
+      justify-content: center; /* Horizontally centers the text */
+      padding: 22px 0;
+      color: var(--text-main);
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      border-bottom: 1px solid var(--glass-border);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      /* Added to prevent blue highlight box on mobile tap */
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .catalog-index {
+      font-family: var(--font-clean);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-right: 12px;
+      opacity: 0.5;
+    }
+
+    /* modern futuristic Center-Out Hover Transitions */
+    /* Wrapped in hover media query so it doesn't stick on mobile touch */
+    @media (hover: hover) {
+      .menu-anchor:hover {
+        color: var(--text-main);
+        letter-spacing: 8px;
+        font-weight: 400;
+        background: rgba(255, 255, 255, 0.01);
+      }
+
+      .menu-row:hover::after {
+        width: 100%;
+      }
+    }
+
+    /* Precision thin line expanding symmetrically from center */
+    .menu-row::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 1px;
+      background-color: var(--text-main);
+      transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateX(-50%);
+    }
+
+    /* PREMIUM FOOTER ARCHITECTURE */
+    footer {
+      width: 100%;
+      /* Added safe-area-inset for iPhone bottom home bar */
+      padding: 30px 20px calc(30px + env(safe-area-inset-bottom));
+      text-align: center;
+      z-index: 10;
+    }
+
+    .footer-text {
+      font-size: 0.65rem;
+      font-weight: 300;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* Premium Cascading Entry Animations */
+    @keyframes luxuryReveal {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal-anim {
+      opacity: 0;
+      animation: luxuryReveal 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    
+    .del-1 { animation-delay: 0.05s; }
+    .del-2 { animation-delay: 0.10s; }
+    .del-3 { animation-delay: 0.15s; }
+    .del-4 { animation-delay: 0.20s; }
+    .del-5 { animation-delay: 0.25s; }
+    .del-6 { animation-delay: 0.30s; }
+    .del-7 { animation-delay: 0.35s; }
+    .del-8 { animation-delay: 0.40s; }
+    .del-9 { animation-delay: 0.45s; }
+    .del-10 { animation-delay: 0.50s; }
+    .del-11 { animation-delay: 0.55s; }
+    .del-12 { animation-delay: 0.60s; }
+
+    /* RESPONSIVE BREAKPOINT MATRIX */
+    @media (max-width: 768px) {
+      .brand-logo { 
+        font-size: 1.1rem; 
+        letter-spacing: 6px; 
+      }
+      .nav-meta-link { 
+        display: none; /* Hidden on small screens to save space */ 
+      }
+      .luxury-header { 
+        padding: calc(20px + env(safe-area-inset-top)) 6% 20px 6%; 
+      }
+      .category-directory-pane { 
+        padding: 40px 25px; 
+        border-radius: 15px; 
+      }
+      .menu-anchor { 
+        font-size: 0.85rem; 
+        padding: 18px 0; 
+        letter-spacing: 3px; 
+      }
+      .lookbook-wrapper {
+        padding-top: 100px;
+      }
+    }
+
+    /* For very small heights to prevent overflow */
+    @media (max-height: 650px) {
+      .lookbook-wrapper { padding-top: 90px; padding-bottom: 20px; }
+      .category-directory-pane { padding: 30px 20px; }
+      .menu-anchor { padding: 15px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="luxury-header">
+    <a href="#" class="brand-logo">SWOOSH MEN'S COLLECTION</a>
+    <a href="#" class="nav-meta-link">Modern Edition</a>
+  </header>
+
+  <main class="lookbook-wrapper">
+    
+    <section class="category-directory-pane">
+      <div class="directory-meta-title reveal-anim">Select Department</div>
+      
+      <ul class="menu-container">
+        <li class="menu-row reveal-anim del-1">
+          <a href="men-sneakers.html?cat=men_sneakers&amp;title=Men's%20Sneakers" class="menu-anchor"><span class="catalog-index">01</span>Sneakers</a>
+        </li>
+        <li class="menu-row reveal-anim del-2">
+          <a href="men's_joggers.html?cat=men_joggers&amp;title=Men's%20Joggers" class="menu-anchor"><span class="catalog-index">02</span>Joggers</a>
+        </li>
+        <li class="menu-row reveal-anim del-3">
+          <a href="men's_shirts.html?cat=men_shirts&amp;title=Men's%20Shirts" class="menu-anchor"><span class="catalog-index">03</span>Shirts</a>
+        </li>
+        <li class="menu-row reveal-anim del-4">
+          <a href="men's_tshirts.html?cat=men_tshirts&amp;title=Men's%20T-Shirts" class="menu-anchor"><span class="catalog-index">04</span>T-Shirts</a>
+        </li>
+        <li class="menu-row reveal-anim del-6">
+          <a href="men's_slides.html?cat=men_slides&amp;title=Men's%20Slides" class="menu-anchor"><span class="catalog-index">06</span>Slides</a>
+        </li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- Changed classes to match the animation engine of this specific page -->
+  <footer class="reveal-anim del-7">
+    <p class="footer-text"> SWOOSH Footgear & Retail Store</p>
+  </footer>
+
+</body>
+</html>
