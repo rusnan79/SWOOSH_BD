@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swoosh | Women's Premium Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        body { font-family: 'Jost', sans-serif; background-color: #ffffff; color: #111; overflow-x: hidden; }
+        h1, h2, h3, h4, h5 { font-family: 'Cinzel', serif; font-weight: 400; }
+
+        /* Navbar */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 5%; 
+            background: linear-gradient(135deg, #0a0a0c 0%, #1e1e24 50%, #000000 100%);
+            position: sticky; top: 0; z-index: 1000; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .brand-logo { 
+            height: 38px; 
+            object-fit: contain; 
+            filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(255,255,255,0.2)); 
+        }
+
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a {
+            text-decoration: none; color: #ffffff;
+            font-size: 13px; letter-spacing: 2px; text-transform: uppercase;
+            transition: color 0.3s ease; cursor: pointer;
+        }
+        .nav-links a:hover { color: #d4af37; }
+        .cart-icon { border-bottom: 1px solid #ffffff; padding-bottom: 2px; font-weight: 500; }
+
+        /* Hero Section */
+        .women-hero {
+            height: 75vh;
+            background: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1600&auto=format&fit=crop') center 30%/cover no-repeat;
+            display: flex; align-items: center; justify-content: center; text-align: center; position: relative;
+        }
+        .women-hero::before { content: ''; position: absolute; inset: 0; background: rgba(0, 0, 0, 0.25); }
+        .hero-text { position: relative; z-index: 1; color: #fff; padding: 0 20px; }
+        .hero-text h1 { font-size: 55px; letter-spacing: 8px; margin-bottom: 15px; text-transform: uppercase; }
+        .hero-text p { font-size: 14px; letter-spacing: 4px; text-transform: uppercase; }
+
+        /* Category Grid */
+        .category-section { padding: 80px 5%; text-align: center; background: #fff; border-bottom: 1px solid #f5f5f5; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 40px; }
+        .section-title { font-size: 26px; letter-spacing: 4px; text-transform: uppercase; }
+        .view-all-btn { cursor: pointer; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; border: 1px solid #111; padding: 8px 15px; transition: 0.3s; background: transparent; }
+        .view-all-btn:hover { background: #111; color: #fff; }
+
+        .category-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 25px; justify-content: center; max-width: 1200px; margin: 0 auto;
+        }
+        .category-item { cursor: pointer; transition: 0.3s ease; }
+        .category-item img {
+            width: 100%; height: 260px; object-fit: cover;
+            border-radius: 4px; margin-bottom: 15px; transition: transform 0.4s ease, filter 0.3s;
+        }
+        .category-item:hover img { transform: translateY(-5px); filter: brightness(0.85); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .category-item h3 { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; }
+
+        /* Product Grid & Slider */
+        .featured-products { padding: 70px 5% 100px; max-width: 1400px; margin: 0 auto; min-height: 50vh; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 50px; }
+        .product-card { transition: opacity 0.4s ease; animation: fadeIn 0.5s ease; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .image-box { 
+            height: 450px; background: #f9f9f9; margin-bottom: 25px; 
+            position: relative; overflow: hidden; border-radius: 4px;
+        }
+        
+        /* Watermark */
+        .image-box::after {
+            content: 'SWOOSH BD      SWOOSH BD      SWOOSH BD      SWOOSH BD      SWOOSH BD      SWOOSH BD';
+            position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            transform: rotate(-30deg); font-family: 'Jost', sans-serif; font-size: 20px;
+            font-weight: 700; color: rgba(255, 255, 255, 0.22); line-height: 5rem;
+            letter-spacing: 4px; pointer-events: none; display: flex; flex-wrap: wrap;
+            justify-content: space-around; align-content: space-around; z-index: 5; white-space: pre-wrap;
+        }
+
+        .slider-container {
+            display: flex; width: 100%; height: 100%;
+            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .slider-container img {
+            min-width: 100%; height: 100%; object-fit: cover; cursor: pointer;
+            transition: transform 0.5s ease;
+        }
+        .image-box:hover .slider-container img { transform: scale(1.05); }
+
+        /* Slider Controls */
+        .slider-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(0,0,0,0.4); color: #fff; border: none;
+            width: 35px; height: 35px; border-radius: 50%; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; z-index: 6; opacity: 0; transition: opacity 0.3s;
+        }
+        .image-box:hover .slider-btn { opacity: 1; }
+        .prev-btn { left: 10px; }
+        .next-btn { right: 10px; }
+        .slider-btn:hover { background: rgba(0,0,0,0.7); }
+
+        .product-details { text-align: center; }
+        .brand { font-size: 11px; color: #888; letter-spacing: 3px; text-transform: uppercase; display: block; margin-bottom: 10px;}
+        .title { font-size: 16px; font-weight: 500; margin-bottom: 10px; letter-spacing: 1px;}
+        .price { font-size: 15px; font-weight: 600; margin-bottom: 20px; display: block;}
+        
+        /* Buttons */
+        .action-btns { display: flex; gap: 12px; justify-content: center; margin-top: 15px; }
+        .action-btns button { 
+            padding: 14px 15px; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px;
+            cursor: pointer; border: 1px solid #111; flex: 1; transition: all 0.3s ease;
+        }
+        .btn-bag { background: #fff; color: #111; }
+        .btn-bag:hover { background: #111; color: #fff; transform: translateY(-3px); }
+
+        .btn-order { background: #111; color: #fff; transition: all 0.3s ease; }
+        .btn-order:hover { background: #0047ab; color: #fff; border-color: #0047ab; transform: translateY(-3px); }
+
+        /* Lightbox Modal */
+        .lightbox-modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000;
+            display: none; align-items: center; justify-content: center; flex-direction: column;
+        }
+        .lightbox-modal.active { display: flex; }
+        .lightbox-content { max-width: 90%; max-height: 80vh; object-fit: contain; border-radius: 4px; }
+        .lightbox-close { position: absolute; top: 25px; right: 35px; color: #fff; font-size: 40px; cursor: pointer; }
+        .lightbox-nav {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: rgba(255,255,255,0.2); color: #fff; border: none;
+            padding: 15px 20px; font-size: 20px; cursor: pointer; border-radius: 4px;
+        }
+        .lightbox-nav:hover { background: rgba(255,255,255,0.4); }
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+
+        /* Cart Sidebar Drawer */
+        .cart-sidebar { 
+            position: fixed; top: 0; right: -420px; width: 400px; height: 100vh; 
+            background: #fff; z-index: 1500; box-shadow: -10px 0 40px rgba(0,0,0,0.2); 
+            transition: right 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); padding: 30px; 
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .cart-sidebar.open { right: 0; }
+        .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .close-cart { font-size: 28px; cursor: pointer; color: #888; }
+        .close-cart:hover { color: #111; }
+        .cart-items-body { flex: 1; overflow-y: auto; margin-top: 20px; padding-right: 5px; }
+
+        .footer { text-align: center; padding: 70px 20px; background: #0a0a0c; color: #fff; }
+
+        /* Loader */
+        .loader {
+            border: 4px solid #f3f3f3; border-top: 4px solid #111; border-radius: 50%;
+            width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 50px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+
+    <nav class="navbar">
+        <div class="logo">
+            <img src="aartboard 1.png" alt="Swoosh Logo" class="brand-logo">
+        </div>
+        <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="mens-categories.html" >Men's</a>
+        <a href="womens-categories.html" style="color: #d4af37;" >Women's</a>
+        <a href="sunglasses.html">SUNGLASSES</a>
+        <a href="umbrellas.html">UMBRELLAS</a>
+            <a onclick="toggleCart()" class="cart-icon" id="cart-counter">Bag (0)</a>
+        </div>
+    </nav>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div>
+            <div class="cart-header">
+                <h3>Your Bag</h3>
+                <span class="close-cart" onclick="toggleCart()">&times;</span>
+            </div>
+            <div class="cart-items-body" id="cartItemsList">
+                <p style="color: #888; text-align: center; margin-top: 40px;">Your bag is empty.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-modal" id="lightboxModal">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <button class="lightbox-nav lightbox-prev" onclick="changeLightboxImage(-1)">&#10094;</button>
+        <img class="lightbox-content" id="lightboxImg" src="">
+        <button class="lightbox-nav lightbox-next" onclick="changeLightboxImage(1)">&#10095;</button>
+    </div>
+
+    <header class="women-hero">
+        <div class="hero-text">
+            <h1>Women's Exclusives</h1>
+            <p>The Premium Curated Edit</p>
+        </div>
+    </header>
+
+    <section class="category-section">
+        <div class="section-header">
+            <h2 class="section-title">Shop The Collection</h2>
+            <button class="view-all-btn" onclick="filterCategory('all')">View All</button>
+        </div>
+        <div class="category-grid">
+            <div class="category-item" onclick="filterCategory('women_sneakers')">
+                <img src="https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=500&auto=format&fit=crop" alt="Sneakers">
+                <h3>Sneakers</h3>
+            </div>
+            <div class="category-item" onclick="filterCategory('women_heels_sandals')">
+                <img src="https://images.unsplash.com/photo-1543163521-1bf539c55dd2?q=80&w=500&auto=format&fit=crop" alt="Heels">
+                <h3>Heels & Sandals</h3>
+            </div>
+            <div class="category-item" onclick="filterCategory('women_tops')">
+                <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=500&auto=format&fit=crop" alt="Tops">
+                <h3>Tops</h3>
+            </div>
+            <div class="category-item" onclick="filterCategory('women_gowns')">
+                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=500&auto=format&fit=crop" alt="Gowns">
+                <h3>Gowns</h3>
+            </div>
+            <div class="category-item" onclick="filterCategory('women_bags')">
+                <img src="https://images.unsplash.com/photo-1591561954557-26941169b49e?q=80&w=500&auto=format&fit=crop" alt="Bags">
+                <h3>Bags</h3>
+            </div>
+            <div class="category-item" onclick="filterCategory('women_jewellery')">
+                <img src="https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=500&auto=format&fit=crop" alt="Jewellery">
+                <h3>Jewellery</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="featured-products">
+        <div class="product-grid" id="productGrid">
+            <div class="loader"></div> <!-- Show loader before Firebase loads -->
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>© 2026 Swoosh BD — Women's Premium Store.</p>
+    </footer>
+
+    <!-- STANDARD JAVASCRIPT FOR UI & CART -->
+    <script>
+        const whatsappNumber = "8801700000000"; // REPLACE WITH YOUR NUMBER (with country code, no +)
+
+        // Global State
+        window.allProducts = [];
+        window.cart = [];
+        let currentLightboxImg = null;
+
+        /* ========== UI Rendering Logic ========== */
+        window.renderProducts = function(products) {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+            
+            if (products.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #888; font-size: 16px; margin-top: 30px;">No products found in this category.</p>';
+                return;
+            }
+
+            products.forEach(p => {
+                let imagesHTML = '';
+                if (p.photos && p.photos.length > 0) {
+                    p.photos.forEach(photo => {
+                        imagesHTML += `<img src="${photo}" onclick="openLightbox(this)">`;
+                    });
+                } else {
+                    imagesHTML = `<img src="https://via.placeholder.com/600x600?text=No+Image" onclick="openLightbox(this)">`;
+                }
+
+                // Format category name for brand display
+                const brand = (p.category || '').replace('women_', '').replace('_', ' ').toUpperCase();
+                
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.setAttribute('data-category', p.category);
+                
+                // Out of stock handling
+                const isOut = p.inStock === false;
+                const btnState = isOut ? 'disabled' : '';
+                const btnText = isOut ? 'OUT OF STOCK' : 'ADD TO BAG';
+                const btnStyle = isOut ? 'opacity:0.5; cursor:not-allowed;' : '';
+
+                card.innerHTML = `
+                    <div class="image-box">
+                        ${p.photos && p.photos.length > 1 ? `<button class="slider-btn prev-btn" onclick="slideImage(this, -1)">&#10094;</button>` : ''}
+                        <div class="slider-container" data-index="0">
+                            ${imagesHTML}
+                        </div>
+                        ${p.photos && p.photos.length > 1 ? `<button class="slider-btn next-btn" onclick="slideImage(this, 1)">&#10095;</button>` : ''}
+                    </div>
+                    <div class="product-details">
+                        <span class="brand">${brand}</span>
+                        <h4 class="title">${p.name || 'Untitled'}</h4>
+                        <span class="price">${p.price || ''}</span>
+                        <div class="action-btns">
+                            <button class="btn-bag" onclick="addToCart('${(p.name || '').replace(/'/g, "\\'")}', '${p.price}', this)" ${btnState} style="${btnStyle}">${btnText}</button>
+                            <button class="btn-order" onclick="directOrder('${(p.name || '').replace(/'/g, "\\'")}', '${p.price}')" ${btnState} style="${btnStyle}">ORDER NOW</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        };
+
+        window.filterCategory = function(cat) {
+            if (cat === 'all') {
+                window.renderProducts(window.allProducts);
+            } else {
+                window.renderProducts(window.allProducts.filter(p => p.category === cat));
+            }
+        };
+
+        /* ========== Slider Logic ========== */
+        window.slideImage = function(btn, direction) {
+            const container = btn.parentElement.querySelector('.slider-container');
+            const images = container.querySelectorAll('img');
+            if (images.length <= 1) return;
+            
+            let index = parseInt(container.getAttribute('data-index') || 0);
+            index += direction;
+            
+            if (index < 0) index = images.length - 1;
+            if (index >= images.length) index = 0;
+            
+            container.setAttribute('data-index', index);
+            container.style.transform = `translateX(-${index * 100}%)`;
+        };
+
+        /* ========== Lightbox Logic ========== */
+        window.openLightbox = function(imgElement) {
+            currentLightboxImg = imgElement;
+            const modal = document.getElementById('lightboxModal');
+            document.getElementById('lightboxImg').src = imgElement.src;
+            modal.classList.add('active');
+        };
+        window.closeLightbox = function() {
+            document.getElementById('lightboxModal').classList.remove('active');
+        };
+        window.changeLightboxImage = function(direction) {
+            if (!currentLightboxImg) return;
+            const container = currentLightboxImg.parentElement;
+            const images = Array.from(container.querySelectorAll('img'));
+            let index = images.indexOf(currentLightboxImg);
+            index += direction;
+            if (index < 0) index = images.length - 1;
+            if (index >= images.length) index = 0;
+            currentLightboxImg = images[index];
+            document.getElementById('lightboxImg').src = currentLightboxImg.src;
+        };
+
+        /* ========== Cart Logic ========== */
+        window.toggleCart = function() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+        };
+
+        window.addToCart = function(title, price, btn) {
+            window.cart.push({ title, price });
+            updateCartUI();
+            
+            btn.innerText = "Added ✓";
+            btn.style.background = "#28a745"; 
+            btn.style.color = "#fff";
+            btn.style.borderColor = "#28a745";
+
+            setTimeout(() => { 
+                btn.innerText = "Add to Bag"; 
+                btn.style.background = "#fff";
+                btn.style.color = "#111";
+                btn.style.borderColor = "#111";
+            }, 1500);
+        };
+
+        window.removeFromCart = function(index) {
+            window.cart.splice(index, 1);
+            updateCartUI();
+        };
+
+        function updateCartUI() {
+            document.getElementById('cart-counter').innerText = `Bag (${window.cart.length})`;
+            const cartList = document.getElementById('cartItemsList');
+            
+            if (window.cart.length === 0) {
+                cartList.innerHTML = '<p style="color: #888; text-align: center; margin-top: 40px;">Your bag is empty.</p>';
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            window.cart.forEach((item, index) => {
+                let numPrice = parseInt(item.price.replace(/[^0-9]/g, '')) || 0;
+                total += numPrice;
+                html += `
+                    <div style="display:flex; justify-content:space-between; margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                        <div>
+                            <h5 style="font-size:14px; margin-bottom:5px; max-width:280px;">${item.title}</h5>
+                            <span style="color:#888; font-size:13px;">${item.price}</span>
+                        </div>
+                        <button onclick="removeFromCart(${index})" style="background:none; border:none; color:red; cursor:pointer; font-size:18px;">&times;</button>
+                    </div>`;
+            });
+            
+            html += `
+                <div style="margin-top:20px; font-weight:bold; display:flex; justify-content:space-between;">
+                    <span>Total:</span>
+                    <span>৳ ${total.toLocaleString()}</span>
+                </div>
+                <button onclick="checkoutCart()" style="width:100%; padding:15px; background:#111; color:#fff; border:none; margin-top:20px; cursor:pointer; text-transform:uppercase; letter-spacing:2px; font-weight:600; transition:0.3s;">
+                    Checkout via WhatsApp
+                </button>`;
+            
+            cartList.innerHTML = html;
+        }
+
+        window.checkoutCart = function() {
+            if(window.cart.length === 0) return;
+            let msg = `Hello Swoosh BD, I would like to order the following items from my bag:\n\n`;
+            let total = 0;
+            window.cart.forEach((item, i) => {
+                msg += `${i+1}. *${item.title}* - ${item.price}\n`;
+                let numPrice = parseInt(item.price.replace(/[^0-9]/g, '')) || 0;
+                total += numPrice;
+            });
+            msg += `\n*Total: ৳ ${total.toLocaleString()}*\n\nPlease let me know the availability and delivery process.`;
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+
+        window.directOrder = function(title, price) {
+            const msg = `Hello Swoosh BD, I would like to order:\n\n*${title}*\nPrice: ${price}\n\nPlease let me know the availability and delivery process.`;
+            window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(msg)}`, '_blank');
+        };
+    </script>
+
+    <!-- FIREBASE FETCHING MODULE -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js';
+        import { getFirestore, collection, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
+
+        // Same credentials from your admin panel
+        const firebaseConfig = {
+            apiKey: "AIzaSyDWBiKKfOQHAhYW5DGVeC3e58IaI3Ltm9E",
+            authDomain: "swoosh-database.firebaseapp.com",
+            projectId: "swoosh-database",
+            storageBucket: "swoosh-database.firebasestorage.app",
+            messagingSenderId: "911580207883",
+            appId: "1:911580207883:web:be3353bb762a38066c600e",
+            measurementId: "G-6FV9QQF6LR"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Define valid Women's categories based on your admin panel
+        const womenCategories = [
+            'women_sneakers', 'women_heels_sandals', 'women_tops', 
+            'women_gowns', 'women_jewellery', 'women_bags', 'womens_sunglasses'
+        ];
+
+        // Fetch updates dynamically
+        onSnapshot(collection(db, 'products'), (snapshot) => {
+            const products = [];
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                // Filter only Women's items
+                if (womenCategories.includes(data.category)) {
+                    products.push({ id: doc.id, ...data });
+                }
+            });
+            
+            // Sort by newest arrivals first
+            products.sort((a, b) => {
+                const timeA = a.createdAt?.toMillis?.() || 0;
+                const timeB = b.createdAt?.toMillis?.() || 0;
+                return timeB - timeA;
+            });
+
+            // Store globally and render the grid
+            window.allProducts = products;
+            window.renderProducts(products);
+        }, (err) => {
+            console.error("Firebase Read Error:", err);
+            document.getElementById('productGrid').innerHTML = '<p style="color:red; text-align:center; grid-column:1/-1;">Error loading products.</p>';
+        });
+    </script>
+</body>
+</html>
