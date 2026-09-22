@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SWOOSH | Luxury Portal</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Montserrat:wght@100;200;300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --text-pure: #ffffff;
+      --text-muted: rgba(255, 255, 255, 0.5);
+      --accent-glow: #00ffcc;
+      --glass-base: rgba(10, 10, 12, 0.45);
+      --glass-border: rgba(255, 255, 255, 0.07);
+      --font-luxury: 'Cinzel', serif;
+      --font-clean: 'Montserrat', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: #050507;
+      color: var(--text-pure);
+      font-family: var(--font-clean);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* IMMERSIVE KINETIC BACKGROUND ENGINE */
+    .parallax-bg-wrapper {
+      position: fixed;
+      top: -5%;
+      left: -5%;
+      width: 110%;
+      height: 110%;
+      background: url('swoosh-backround-image-2.jpg') no-repeat center center;
+      background-size: cover;
+      z-index: -2;
+      transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* High-contrast luxury ambient vignette overlay */
+    .bg-vignette {
+      position: fixed;
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(4, 4, 66, 0.271) 0%, rgba(5, 5, 7, 0.85) 100%);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* HEADER ARCHITECTURE */
+    header {
+      width: 100%;
+      padding: 40px 6% 20px 6%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+    }
+
+    .logo-frame {
+      max-width: 160px;
+      height: auto;
+      filter: drop-shadow(0 4px 20px rgba(0,0,0,0.3));
+      transition: transform 0.5s ease;
+    }
+
+    .logo-frame:hover {
+      transform: scale(1.02);
+    }
+
+    /* CENTER-ALIGNED WORKSPACE CONSOLE */
+    .main-portal-container {
+      width: 100%;
+      max-width: 580px;
+      padding: 0 24px;
+      margin: 20px auto;
+      z-index: 5;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* GLASSMORPHIC CONSOLE GRID */
+    .directory-glass-panel {
+      background: var(--glass-base);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      width: 100%;
+      padding: 45px 40px;
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      box-shadow: 0 30px 70px rgba(0, 0, 0, 0.5);
+    }
+
+    .panel-subtitle {
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 7px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      text-align: center;
+      margin-bottom: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .panel-subtitle::before, 
+    .panel-subtitle::after {
+      content: '';
+      width: 15px;
+      height: 1px;
+      background: var(--glass-border);
+    }
+
+    /* RECONSTRUCTED INTERACTIVE ROWS */
+    .link-matrix {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .portal-row {
+      position: relative;
+      width: 100%;
+    }
+
+    .portal-anchor {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px 10px;
+      color: var(--text-pure);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 300;
+      text-transform: uppercase;
+      letter-spacing: 5px;
+      border-bottom: 1px solid var(--glass-border);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .row-index {
+      font-size: 0.6rem;
+      font-weight: 400;
+      color: var(--text-muted);
+      margin-right: 12px;
+      opacity: 0.4;
+    }
+
+    /* MODERN HIGH-END HOVER MATRIX */
+    .portal-anchor:hover {
+      letter-spacing: 8px;
+      color: var(--text-pure);
+      background: rgba(255, 255, 255, 0.02);
+      text-shadow: 0 0 10px rgba(255,255,255,0.25);
+    }
+
+    /* Smooth center-out expanding line */
+    .portal-row::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--text-pure), transparent);
+      transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateX(-50%);
+    }
+
+    .portal-row:hover::after {
+      width: 100%;
+    }
+
+    /* Elite highlight overrides for official touchpoints */
+    .portal-anchor.highlight-meta:hover {
+      color: var(--accent-glow);
+      text-shadow: 0 0 12px rgba(0, 255, 204, 0.4);
+    }
+    
+    .portal-row.highlight-row::after {
+      background: linear-gradient(90deg, transparent, var(--accent-glow), transparent);
+    }
+
+    /* PREMIUM FOOTER ARCHITECTURE */
+    footer {
+      width: 100%;
+      padding: 30px 20px;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .footer-text {
+      font-size: 0.65rem;
+      font-weight: 300;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    /* CASCADING FLUID MOTION ANIMATIONS */
+    @keyframes entryReveal {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .anim-cascade {
+      opacity: 0;
+      animation: entryReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    
+    .d-1 { animation-delay: 0.05s; }
+    .d-2 { animation-delay: 0.10s; }
+
+    /* RESPONSIVE BREAKPOINT MATRIX */
+    @media (max-width: 768px) {
+      header { 
+        padding: 35px 6% 15px 6%; 
+      }
+      
+      .logo-frame { 
+        max-width: 130px; 
+      }
+      
+      .directory-glass-panel { 
+        padding: 35px 25px; 
+        border-radius: 20px; 
+        margin: 15px;
+      }
+      
+      .portal-anchor { 
+        font-size: 0.85rem; 
+        padding: 18px 5px; 
+        letter-spacing: 4px; 
+      }
+      
+      .portal-anchor:hover { 
+        letter-spacing: 6px; 
+      }
+      
+      .panel-subtitle {
+        font-size: 0.6rem;
+        margin-bottom: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 30px 4% 10px 4%;
+      }
+      
+      .logo-frame { 
+        max-width: 110px; 
+      }
+      
+      .main-portal-container {
+        padding: 0 12px;
+        margin: 10px auto;
+      }
+      
+      .directory-glass-panel { 
+        padding: 30px 20px; 
+        border-radius: 16px;
+        margin: 10px;
+      }
+      
+      .portal-anchor { 
+        font-size: 0.8rem; 
+        letter-spacing: 3px;
+        padding: 16px 5px;
+      }
+      
+      .row-index {
+        font-size: 0.55rem;
+        margin-right: 8px;
+      }
+      
+      .panel-subtitle {
+        font-size: 0.55rem;
+        letter-spacing: 5px;
+        margin-bottom: 25px;
+      }
+      
+      .panel-subtitle::before, 
+      .panel-subtitle::after {
+        width: 10px;
+      }
+    }
+
+    /* Loading state */
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="parallax-bg-wrapper" id="heroCanvas"></div>
+  <div class="bg-vignette"></div>
+
+  <header class="anim-cascade">
+    <img src="aartboard 1.png" alt="SWOOSH Brand Identity" class="logo-frame">
+  </header>
+
+  <main class="main-portal-container anim-cascade d-1">
+    <section class="directory-glass-panel">
+      
+      <div class="panel-subtitle">Studio Directory</div>
+      
+      <nav class="link-matrix">
+        
+        <div class="portal-row highlight-row">
+          <a href="https://www.facebook.com/profile.php?id=61572781814076" class="portal-anchor highlight-meta">
+            <span class="row-index"></span> Facebook Studio
+          </a>
+        </div>
+        
+        <div class="portal-row">
+          <a href="mens-categories.html" class="portal-anchor">
+            <span class="row-index"></span> Men's Ready-To-Wear
+          </a>
+        </div>
+        
+        <div class="portal-row">
+          <a href="womens-categories.html" class="portal-anchor">
+            <span class="row-index"></span> Women's Ready-To-Wear
+          </a>
+        </div>
+        
+        <div class="portal-row">
+          <a href="sunglasses.html" class="portal-anchor">
+            <span class="row-index"></span> Sunglasses Atelier
+          </a>
+        </div>
+        
+        <div class="portal-row">
+          <a href="umbrellas.html" class="portal-anchor">
+            <span class="row-index"></span> Luxury Umbrellas
+          </a>
+        </div>
+        
+        <div class="portal-row highlight-row">
+          <a href="https://wa.me/message/C7BIGTH3DVLLM1" class="portal-anchor highlight-meta">
+            <span class="row-index"></span> WhatsApp Concierge
+          </a>
+        </div>
+
+      </nav>
+
+    </section>
+  </main>
+
+  <footer class="anim-cascade d-2">
+    <p class="footer-text"> SWOOSH Footgear & Retail Store</p>
+  </footer>
+
+  <script>
+    const canvasBg = document.getElementById('heroCanvas');
+    
+    // Parallax effect for desktop only
+    if (window.innerWidth > 1024) {
+      document.addEventListener('mousemove', (e) => {
+        const deltaX = (window.innerWidth / 2 - e.clientX) * 0.012;
+        const deltaY = (window.innerHeight / 2 - e.clientY) * 0.012;
+        canvasBg.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(1.02)`;
+      });
+    }
+
+    // Mobile touch optimization
+    const links = document.querySelectorAll('.portal-anchor');
+    links.forEach(link => {
+      link.addEventListener('touchstart', function() {
+        this.style.opacity = '0.8';
+      });
+      link.addEventListener('touchend', function() {
+        this.style.opacity = '1';
+      });
+    });
+  </script>
+
+</body>
+</html>
