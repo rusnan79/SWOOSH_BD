@@ -120,29 +120,42 @@ html, body {
       padding: 10px 20px;
       font-size: 1rem;
     }
-      /* Logo ebong Text pasapashi anar jonno */
+      
+/* Mobile e logo o /* Container fix for perfect vertical center alignment */
 .brand-logo-area {
     display: flex;
-    align-items: center;
+    align-items: center; /* Eta lekha ke ekdom middle e anbe */
     justify-content: center;
-    gap: 12px; 
-    cursor: pointer;
+    gap: 15px; /* Logo r lekhar majhe faka jayga */
+    text-decoration: none;
 }
 
-/* SWOOSH lekha-tir style */
+/* Logo image er nicher extra barti space katanor jonno */
+.brand-logo-area img.brand-logo {
+    display: block;
+    height: 45px; /* Apnar logo jodi choto-boro korte chan, ei 45px k change korben */
+    width: auto;
+}
+
+/* SWOOSH lekha-tir premium o mota style */
 .brand-text {
-    color: #ffffff; 
-    font-size: 1.5rem; 
-    font-weight: bold; 
-    letter-spacing: 3px; 
+    color: #ffffff; /* Ekdom ujjol sada rong */
+    font-size: 1.8rem; /* Lekhar size ektu boro kora hoyeche */
+    font-weight: 800; /* Lekha-ti ekdom mota (Bold) korbe */
+    letter-spacing: 4px; /* Okkhor gulor majhe faka jayga dibe */
     text-transform: uppercase; 
-    font-family: 'Oswald', Arial, sans-serif;
+    font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; /* Sundor modern font */
+    line-height: 1; /* Alignment thik rakhar jonno */
+    margin-top: 2px; /* Middle e thikmoto boshanor jonno slight adjustment */
 }
 
-/* Mobile e logo o text ektu choto korar jonno */
+/* Mobile screen er jonno size thik rakhte */
 @media (max-width: 480px) {
     .brand-text {
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         letter-spacing: 2px;
+    }
+    .brand-logo-area img.brand-logo {
+        height: 35px;
     }
 }
