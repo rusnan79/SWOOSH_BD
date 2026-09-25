@@ -4,57 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Swoosh | Men's Premium Collection</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Jost:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
 
-    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@200;300;400;500;600;700&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
-        body { font-family: 'Jost', sans-serif; background-color: #ffffff; color: #111; overflow-x: hidden; }
+        
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        body { font-family: 'Jost', sans-serif; background-color: #ffffff; color: #111; }
         h1, h2, h3, h4, h5 { font-family: 'Cinzel', serif; font-weight: 400; }
 
         /* Navbar */
         .navbar {
-            display: flex; justify-content: space-between; align-items: center;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
             padding: 18px 5%; 
             background: linear-gradient(135deg, #0a0a0c 0%, #1e1e24 50%, #000000 100%);
-            position: sticky; top: 0; z-index: 1000; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        
-      .brand-logo-area {
-    display: flex;
-    align-items: center; 
-    gap: 12px;
-    text-decoration: none;
-}
 
-.brand-logo {
-    height: 38px;
-    object-fit: contain;
-    filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(255,255,255,0.2));
-    display: block;
-}
+        /* Brand Logo & SWOOSH Text Vertical Alignment */
+        .brand-logo-area {
+            display: flex;
+            align-items: center; 
+            gap: 12px;
+            text-decoration: none;
+        }
 
-.brand-text {
-    color: #ffffff;
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    font-size: 22px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    line-height: 1;
-}
+        .brand-logo {
+            height: 38px;
+            object-fit: contain;
+            filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(255,255,255,0.2));
+            display: block;
+        }
 
-@media (max-width: 768px) {
-    .brand-text {
-        font-size: 18px;
-        letter-spacing: 2px;
-    }
-    .brand-logo {
-        height: 30px;
-    }
-}
+        .brand-text {
+            color: #ffffff;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            line-height: 1;
+        }
 
         .nav-links { display: flex; gap: 30px; align-items: center; }
         .nav-links a {
@@ -65,7 +69,30 @@
         .nav-links a:hover { color: #d4af37; }
         .cart-icon { border-bottom: 1px solid #ffffff; padding-bottom: 2px; font-weight: 500; }
 
-        /* Hero Section - Men's specific image */
+        /* Responsive Mobile Styles */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column; 
+                justify-content: center;
+                padding: 15px 0;
+            }
+            .brand-text {
+                font-size: 18px;
+                letter-spacing: 2px;
+            }
+            .brand-logo {
+                height: 30px;
+            }
+            .nav-links {
+                flex-wrap: wrap; 
+                justify-content: center;
+                gap: 12px;
+                width: 100%;
+                padding-top: 15px;
+            }
+        }
+
+        /* Hero Section */
         .men-hero {
             height: 75vh;
             background: url('https://images.unsplash.com/photo-1617137968427-85924c800a22?q=80&w=1600&auto=format&fit=crop') center 30%/cover no-repeat;
@@ -195,44 +222,17 @@
             width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 50px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        /* 1. Dan pasher sada (blank) space thekanor jonno */
-html, body {
-    max-width: 100vw;
-    overflow-x: hidden;
-    margin: 0;
-    padding: 0;
-}
-
-/* 2. Mobile e navbar r logo fix korar jonno */
-@media (max-width: 768px) {
-    .navbar {
-        display: flex;
-        flex-direction: column; 
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        padding: 15px 0;
-    }
-    
-    .nav-links {
-        display: flex;
-        flex-wrap: wrap; 
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-        padding-top: 15px;
-    }
-}
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800&display=swap" rel="stylesheet">
     </style>
 </head>
 <body>
 
-    <a> href="index.html" class="brand-logo-area">
-    <img src="aartboard 1.png" alt="Swoosh Logo" class="brand-logo">
-    <span class="brand-text">SWOOSH</span>
-</a>
+    <!-- Header Navbar -->
+    <nav class="navbar">
+        <a href="index.html" class="brand-logo-area">
+            <img src="aartboard 1.png" alt="Swoosh Logo" class="brand-logo">
+            <span class="brand-text">SWOOSH</span>
+        </a>
+        
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="mens-categories.html" style="color: #d4af37;">Men's</a>
@@ -306,7 +306,7 @@ html, body {
 
     <section class="featured-products">
         <div class="product-grid" id="productGrid">
-            <div class="loader"></div> <!-- Show loader before Firebase loads -->
+            <div class="loader"></div>
         </div>
     </section>
 
@@ -316,14 +316,12 @@ html, body {
 
     <!-- STANDARD JAVASCRIPT FOR UI & CART -->
     <script>
-        const whatsappNumber = "8801575619904"; // Replaced with your previously provided number
+        const whatsappNumber = "8801575619904";
 
-        // Global State
         window.allProducts = [];
         window.cart = [];
         let currentLightboxImg = null;
 
-        /* ========== UI Rendering Logic ========== */
         window.renderProducts = function(products) {
             const grid = document.getElementById('productGrid');
             grid.innerHTML = '';
@@ -343,14 +341,12 @@ html, body {
                     imagesHTML = `<img src="https://via.placeholder.com/600x600?text=No+Image" onclick="openLightbox(this)">`;
                 }
 
-                // Format category name for brand display
                 const brand = (p.category || '').replace('mens_', '').replace('men_', '').replace('_', ' ').toUpperCase();
                 
                 const card = document.createElement('div');
                 card.className = 'product-card';
                 card.setAttribute('data-category', p.category);
                 
-                // Out of stock handling
                 const isOut = p.inStock === false;
                 const btnState = isOut ? 'disabled' : '';
                 const btnText = isOut ? 'OUT OF STOCK' : 'ADD TO BAG';
@@ -386,7 +382,6 @@ html, body {
             }
         };
 
-        /* ========== Slider Logic ========== */
         window.slideImage = function(btn, direction) {
             const container = btn.parentElement.querySelector('.slider-container');
             const images = container.querySelectorAll('img');
@@ -402,7 +397,6 @@ html, body {
             container.style.transform = `translateX(-${index * 100}%)`;
         };
 
-        /* ========== Lightbox Logic ========== */
         window.openLightbox = function(imgElement) {
             currentLightboxImg = imgElement;
             const modal = document.getElementById('lightboxModal');
@@ -424,7 +418,6 @@ html, body {
             document.getElementById('lightboxImg').src = currentLightboxImg.src;
         };
 
-        /* ========== Cart Logic ========== */
         window.toggleCart = function() {
             document.getElementById('cartSidebar').classList.toggle('open');
         };
@@ -524,27 +517,23 @@ html, body {
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Fetch updates dynamically
         onSnapshot(collection(db, 'products'), (snapshot) => {
             const products = [];
             snapshot.forEach((doc) => {
                 const data = doc.data();
                 const categoryStr = (data.category || '').toLowerCase();
                 
-                // Condition: "men" thakte hobe kintu "women" thaka jabena jeno women er ta ekhane na ashe
                 if (categoryStr.includes('men') && !categoryStr.includes('women')) {
                     products.push({ id: doc.id, ...data });
                 }
             });
             
-            // Sort by newest arrivals first
             products.sort((a, b) => {
                 const timeA = a.createdAt?.toMillis?.() || 0;
                 const timeB = b.createdAt?.toMillis?.() || 0;
                 return timeB - timeA;
             });
 
-            // Store globally and render the grid
             window.allProducts = products;
             window.renderProducts(products);
         }, (err) => {
