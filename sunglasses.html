@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Swoosh | Sunglasses Collection</title>
     
-    <!-- Google Fonts: Cinzel, Jost, Orbitron & Montserrat -->
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@200;300;400;500;600;700&family=Orbitron:wght@900&family=Montserrat:wght@800&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@200;300;400;500;600;700&family=Orbitron:wght@900&display=swap" rel="stylesheet">
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
@@ -48,7 +48,7 @@
 
         .brand-text {
             color: #ffffff;
-            font-family: 'Orbitron', sans-serif; /* Futuristic logo font style */
+            font-family: 'Orbitron', sans-serif;
             font-weight: 900;
             font-size: 20px;
             letter-spacing: 4px;
@@ -70,7 +70,8 @@
             .navbar {
                 flex-direction: column; 
                 justify-content: center;
-                padding: 15px 0;
+                padding: 12px 10px;
+                gap: 8px;
             }
             .brand-text {
                 font-size: 16px;
@@ -80,11 +81,30 @@
                 height: 30px;
             }
             .nav-links {
-                flex-wrap: wrap; 
-                justify-content: center;
-                gap: 12px;
+                display: flex;
+                flex-wrap: nowrap; 
+                overflow-x: auto;
                 width: 100%;
-                padding-top: 15px;
+                justify-content: flex-start;
+                gap: 20px;
+                padding: 5px 10px;
+                -webkit-overflow-scrolling: touch;
+            }
+            .nav-links::-webkit-scrollbar {
+                display: none;
+            }
+            .nav-links a {
+                font-size: 11px;
+                letter-spacing: 1px;
+                white-space: nowrap;
+            }
+            .hero-text h1 {
+                font-size: 30px !important;
+                letter-spacing: 4px !important;
+            }
+            .hero-text p {
+                font-size: 12px !important;
+                letter-spacing: 2px !important;
             }
         }
 
