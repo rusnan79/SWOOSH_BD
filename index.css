@@ -114,3 +114,29 @@
       padding: 10px 20px;
       font-size: 1rem;
     }
+      /* Logo ebong Text pasapashi anar jonno */
+.brand-logo-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px; 
+    cursor: pointer;
+}
+
+/* SWOOSH lekha-tir style */
+.brand-text {
+    color: #ffffff; 
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    letter-spacing: 3px; 
+    text-transform: uppercase; 
+    font-family: 'Oswald', Arial, sans-serif;
+}
+
+/* Mobile e logo o text ektu choto korar jonno */
+@media (max-width: 480px) {
+    .brand-text {
+        font-size: 1.2rem;
+        letter-spacing: 2px;
+    }
+}
