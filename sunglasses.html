@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Swoosh | Sunglasses Collection</title>
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts: Cinzel, Jost & Orbitron -->
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Jost:wght@200;300;400;500;600;700&family=Orbitron:wght@900&display=swap" rel="stylesheet">
 
     <style>
@@ -16,6 +16,15 @@
             overflow-x: hidden;
             margin: 0;
             padding: 0;
+        }
+
+        /* 144Hz Ultra Smooth GPU Hardware Acceleration */
+        *, .product-card, .category-item, .slider-container, .slider-btn, .btn-bag, .btn-order {
+            -webkit-font-smoothing: antialiased;
+            transform: translateZ(0);
+        }
+        .slider-container, .product-card, .category-item img, .btn-bag, .btn-order {
+            will-change: transform;
         }
 
         body { font-family: 'Jost', sans-serif; background-color: #ffffff; color: #111; }
@@ -238,16 +247,6 @@
             width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 50px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* 144Hz Ultra Smooth GPU Hardware Acceleration */
-*, .product-card, .category-item, .slider-container, .slider-btn, .btn-bag, .btn-order {
-    -webkit-font-smoothing: antialiased;
-    transform: translateZ(0);
-}
-
-.slider-container, .product-card, .category-item img, .btn-bag, .btn-order {
-    will-change: transform;
-}
     </style>
 </head>
 <body>
