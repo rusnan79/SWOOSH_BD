@@ -4,152 +4,157 @@ html, body {
     margin: 0;
     padding: 0;
 }
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
-  
-  body {
+}
+
+body {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: rgba(red, green, blue, alpha);
-    background-image: url('swoosh-background-image-2.jpg'); /* Background image */
+    background-color: rgba(0, 0, 0, 0.5); 
+    background-image: url('swoosh-background-image-2.jpg');
     background-size: cover;
     background-position: center;
-    text-align: center; /* Ensure everything is center-aligned */
+    text-align: center;
     color: #fff;
-  }
-  
-  header {
+}
+
+header {
     display: flex;
     color: #000;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-  }
-  
-  header h1 {
+}
+
+header h1 {
     font-size: 5rem;
     margin-bottom: 50px;
     color: #0b0533;
-  }
-  
-  .logo {
+}
+
+.logo {
     max-width: 150px;
     margin-bottom: 20px;
-  }
-  
-  .Whatsapp-section{
+}
+
+.Whatsapp-section{
     background-color: bisque;
     margin-top: 30px;
-  }
+}
 
-  .Mens-section{
+.Mens-section{
     background-color: #4c10108b;
     margin-top: 30px;
-  }
+}
 
-  .Womens-section{
+.Womens-section{
     background-color: #0f054a;
     margin-top: 30px;
-  }
+}
 
-  .Avaiable-section{
+.Avaiable-section{
     background-color: #333;
     margin-top: 30px;
-  }
+}
 
-  .facebook-section {
+.facebook-section {
     margin-top: 30px;
-  }
-  
-  .button {
+}
+
+.button {
     padding: 15px 50px;
     gap: 10px;
     background-color: #150322d3;
     color: #fff;
-    text-decoration: rgba(19, 19, 91, 0.786);
+    text-decoration: none;
     font-size: 1.2rem;
     border-radius: 6px;
     transition: background-color 0.3s ease;
-  }
-  
-  .button:hover {
+}
+
+.button:hover {
     background-color: #333333a1;
-  }
-  
-  /* Facebook-specific styling */
-  .button.facebook {
+}
+
+/* Facebook-specific styling */
+.button.facebook {
     background-color: #3b5998;
-  }
-  
-  .button.facebook:hover {
+}
+
+.button.facebook:hover {
     background-color: #2d4373;
-  }
-  
-  footer {
+}
+
+footer {
     position: absolute;
     bottom: 20px;
     color: #0f054a;
-  }
-  /* Media Queries for Responsiveness */
-  @media screen and (min-width: 768px) {
+}
+
+/* Media Queries for Responsiveness */
+@media screen and (min-width: 768px) {
     .logo {
-      max-width: 200px;
+        max-width: 200px;
     }
-
     .button {
-      padding: 15px 50px;
-      font-size: 1.3rem;
-      max-width: 350px;
+        padding: 15px 50px;
+        font-size: 1.3rem;
+        max-width: 350px;
     }
-  }
+}
 
-  @media screen and (max-width: 480px) {
+@media screen and (max-width: 480px) {
     .logo {
-      max-width: 120px;
+        max-width: 120px;
     }
-
     .button {
-      padding: 10px 20px;
-      font-size: 1rem;
+        padding: 10px 20px;
+        font-size: 1rem;
     }
-      
-/* Mobile e logo o /* Container fix for perfect vertical center alignment */
+} /* <-- VUL TIK KORA HOYECHE: Ei bracket ta miss chilo */
+
+/* ========================================= */
+/* BRAND LOGO O TEXT ER PERFECT STYLING      */
+/* ========================================= */
+
 .brand-logo-area {
     display: flex;
-    align-items: center; /* Eta lekha ke ekdom middle e anbe */
+    align-items: center; /* Ekdom perfect middle-e anbe */
     justify-content: center;
-    gap: 15px; /* Logo r lekhar majhe faka jayga */
+    gap: 12px;
     text-decoration: none;
+    height: 100%; /* Height fix */
 }
 
-/* Logo image er nicher extra barti space katanor jonno */
 .brand-logo-area img.brand-logo {
     display: block;
-    height: 45px; /* Apnar logo jodi choto-boro korte chan, ei 45px k change korben */
+    height: 45px;
     width: auto;
+    object-fit: contain;
 }
 
-/* SWOOSH lekha-tir premium o mota style */
 .brand-text {
-    color: #ffffff; /* Ekdom ujjol sada rong */
-    font-size: 1.8rem; /* Lekhar size ektu boro kora hoyeche */
-    font-weight: 800; /* Lekha-ti ekdom mota (Bold) korbe */
-    letter-spacing: 4px; /* Okkhor gulor majhe faka jayga dibe */
+    color: #ffffff;
+    font-size: 1.8rem;
+    font-weight: 800; /* Ekdom mota korbe */
+    letter-spacing: 4px;
     text-transform: uppercase; 
-    font-family: 'Montserrat', 'Helvetica Neue', Arial, sans-serif; /* Sundor modern font */
-    line-height: 1; /* Alignment thik rakhar jonno */
-    margin-top: 2px; /* Middle e thikmoto boshanor jonno slight adjustment */
+    font-family: 'Montserrat', sans-serif; /* Premium bold font */
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    margin-top: 2px;
 }
 
-/* Mobile screen er jonno size thik rakhte */
 @media (max-width: 480px) {
     .brand-text {
         font-size: 1.4rem;
