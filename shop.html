@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>SWOOSH — Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant:ital,wght@1,600;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:      #FCFCFA;
+  --ink:     #0A0A0A;
+  --ink-70:  #46464A;
+  --ink-45:  #8A8A8E;
+  --line:    #E7E7E3;
+  --surface: #F1F1EE;
+  --white:   #FFFFFF;
+  --r: 2px;
+  --t1: .15s; --t2: .3s;
+  --eo: cubic-bezier(0,0,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{ font-family:'Outfit',sans-serif; background:var(--bg); color:var(--ink); min-height:100dvh; overflow-x:hidden; }
+a{color:inherit;} button{font-family:inherit;}
+::selection{background:var(--ink);color:var(--white);}
+
+/* ---------- ANNOUNCEMENT + HEADER ---------- */
+.announce{ background:var(--ink); color:var(--white); text-align:center;
+  font-size:11px; letter-spacing:.14em; font-weight:500; padding:9px 12px; }
+
+header{ display:flex; align-items:center; justify-content:space-between;
+  padding:20px 24px; border-bottom:1px solid var(--line); position:sticky; top:0;
+  background:var(--bg); z-index:200; gap:14px; }
+.logo-mark{ font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.08em;
+  text-decoration:none; color:var(--ink); flex-shrink:0; }
+.header-nav{ display:flex; align-items:center; gap:22px; overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
+.header-nav::-webkit-scrollbar{ display:none; }
+.header-nav a{ text-decoration:none; color:var(--ink-70); font-size:11px; font-weight:600;
+  letter-spacing:.12em; text-transform:uppercase; transition:color var(--t1); white-space:nowrap; flex-shrink:0; }
+.header-nav a:hover{ color:var(--ink); }
+.header-nav a.active{ color:var(--ink); border-bottom:2px solid var(--ink); padding-bottom:3px; }
+.bag-btn{ position:relative; border:none; background:none; cursor:pointer; padding:0; flex-shrink:0;
+  color:var(--ink-70); font-size:11px; font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+  transition:color var(--t1); display:flex; align-items:center; gap:6px; }
+.bag-btn:hover{ color:var(--ink); }
+.bag-badge{ font-weight:700; }
+
+/* ---------- GENDER HERO ---------- */
+.gender-hero{ position:relative; height:52vh; min-height:340px; max-height:560px;
+  display:flex; align-items:center; justify-content:center; background-size:cover;
+  background-position:center 30%; background-color:var(--ink); overflow:hidden; }
+.gender-hero.no-photo{ background:linear-gradient(135deg,#1c1c1e,#3a3a3d); }
+.gender-hero::before{ content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(10,10,10,.1) 0%, rgba(10,10,10,.4) 100%); }
+.gender-hero-text{ position:relative; z-index:1; text-align:center; padding:0 24px; color:#fff; }
+.gender-hero-text h1{ font-family:'Cormorant',serif; font-style:italic; font-weight:700;
+  font-size:clamp(2.1rem,7vw,4.2rem); letter-spacing:.03em; text-shadow:0 2px 24px rgba(0,0,0,.35); }
+.gender-hero-text p{ font-size:11px; letter-spacing:.32em; text-transform:uppercase;
+  margin-top:14px; opacity:.9; text-shadow:0 1px 12px rgba(0,0,0,.3); }
+
+/* ---------- SEARCH ---------- */
+.search-wrap{ padding:16px 20px 0; max-width:1400px; margin:0 auto; }
+.search-box{ position:relative; }
+.search-box svg{ position:absolute; left:16px; top:50%; transform:translateY(-50%);
+  width:15px; height:15px; opacity:.4; pointer-events:none; }
+#searchInput{ width:100%; padding:14px 16px 14px 42px; border:1px solid var(--line);
+  border-radius:var(--r); background:var(--white); font-size:16px; letter-spacing:.03em;
+  color:var(--ink); outline:none; transition:border-color var(--t1); }
+#searchInput::placeholder{ color:var(--ink-45); text-transform:uppercase; letter-spacing:.06em; }
+#searchInput:focus{ border-color:var(--ink); }
+
+/* ---------- CATEGORY PICTURE GRID ---------- */
+.cat-section{ max-width:1400px; margin:0 auto; padding:36px 20px 6px; }
+.cat-section-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:22px; }
+.cat-eyebrow{ font-family:'Cormorant',serif; font-style:italic; font-weight:600;
+  font-size:clamp(1.5rem,4vw,2.1rem); color:var(--ink); }
+.cat-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(12px,2vw,22px); }
+@media (min-width:640px){ .cat-grid{ grid-template-columns:repeat(3,1fr); } }
+@media (min-width:960px){ .cat-grid{ grid-template-columns:repeat(6,1fr); } }
+.cat-tile{ cursor:pointer; text-align:center; background:none; border:none; padding:0; }
+.cat-tile-img{ aspect-ratio:3/4; border-radius:4px; overflow:hidden; background:var(--surface);
+  border:2px solid transparent; transition:border-color var(--t1), transform var(--t1); margin-bottom:11px; }
+.cat-tile-img img{ width:100%; height:100%; object-fit:cover; display:block; }
+.cat-tile:hover .cat-tile-img{ transform:translateY(-3px); }
+.cat-tile.active .cat-tile-img{ border-color:var(--ink); }
+.cat-tile-label{ font-family:'Cormorant',serif; font-style:italic; font-weight:600;
+  font-size:13px; color:var(--ink-70); line-height:1.3; }
+.cat-tile.active .cat-tile-label{ color:var(--ink); }
+
+/* ---------- MAIN / SECTION HEAD ---------- */
+main{ max-width:1400px; margin:0 auto; padding:0 20px 100px; }
+.sec-head{ display:flex; align-items:baseline; justify-content:space-between;
+  gap:12px; margin:34px 0 22px; }
+.sec-title{ font-family:'Cormorant',serif; font-style:italic; font-weight:600;
+  font-size:clamp(1.8rem,5vw,2.8rem); }
+.sec-count{ font-size:11px; letter-spacing:.1em; color:var(--ink-45); white-space:nowrap; }
+
+.demo-note{ background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  padding:12px 16px; font-size:11.5px; color:var(--ink-70); margin-bottom:22px; line-height:1.5; }
+.demo-note b{ color:var(--ink); }
+
+/* ---------- GRID / CARD ---------- */
+.grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(14px,2.4vw,28px); }
+@media (min-width:720px){ .grid{ grid-template-columns:repeat(3,1fr); } }
+@media (min-width:1100px){ .grid{ grid-template-columns:repeat(4,1fr); } }
+
+.card{ display:flex; flex-direction:column; opacity:0; transform:translateY(16px);
+  transition:opacity .5s var(--eo), transform .5s var(--eo); }
+.card.vis{ opacity:1; transform:none; }
+
+.c-img{ position:relative; aspect-ratio:4/5; overflow:hidden; cursor:pointer; background:var(--surface); }
+.main-img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block;
+  opacity:0; transition:opacity .35s var(--eo), transform .6s var(--eo); }
+.main-img.on{ opacity:1; }
+.c-img:hover .main-img.on{ transform:scale(1.045); }
+
+.tag{ position:absolute; top:10px; left:10px; z-index:3; background:var(--ink); color:var(--white);
+  font-size:9.5px; font-weight:700; letter-spacing:.08em; padding:5px 10px; text-transform:uppercase; }
+.tag.tag-new{ background:var(--white); color:var(--ink); border:1px solid var(--ink); }
+
+.c-count{ position:absolute; top:10px; right:10px; z-index:3; background:rgba(255,255,255,.9);
+  color:var(--ink); font-size:9.5px; font-weight:600; padding:4px 8px; border-radius:999px; }
+.c-dots{ position:absolute; bottom:9px; left:0; right:0; z-index:3; display:flex; justify-content:center; gap:4px; }
+.c-dot{ width:4px; height:4px; border-radius:50%; background:rgba(255,255,255,.6);
+  box-shadow:0 1px 3px rgba(0,0,0,.3); cursor:pointer; transition:all var(--t1) var(--eo); }
+.c-dot.on{ background:#fff; width:13px; border-radius:3px; }
+.c-nav{ position:absolute; top:50%; transform:translateY(-50%); z-index:3;
+  background:rgba(255,255,255,.85); color:var(--ink); border:none; width:26px; height:26px;
+  border-radius:50%; display:flex; align-items:center; justify-content:center;
+  cursor:pointer; opacity:0; font-size:15px; line-height:1; transition:opacity var(--t1); }
+.c-img:hover .c-nav{ opacity:1; }
+.c-prev{ left:8px; } .c-next{ right:8px; }
+@media (hover:none){ .c-nav{ display:none; } }
+
+.c-body{ padding:13px 2px 0; display:flex; flex-direction:column; gap:3px; flex:1; }
+.c-brand{ font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-45); }
+.c-name{ font-size:13px; color:var(--ink); line-height:1.35;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.c-price{ font-size:13.5px; font-weight:600; margin-top:2px; }
+.out-of-stock{ color:var(--ink-45); text-decoration:line-through; font-weight:400; }
+
+.btn-row{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+.order-btn,.bag-add-btn{ display:flex; align-items:center; justify-content:center; gap:8px;
+  text-decoration:none; padding:11px 14px; font-size:10.5px; font-weight:600; letter-spacing:.12em;
+  text-transform:uppercase; transition:background var(--t1), color var(--t1); border:1px solid var(--ink);
+  cursor:pointer; }
+.order-btn{ background:var(--ink); color:var(--white); }
+.order-btn svg{ width:13px; height:13px; }
+.order-btn:hover{ background:var(--white); color:var(--ink); }
+.bag-add-btn{ background:var(--white); color:var(--ink); }
+.bag-add-btn:hover{ background:var(--ink); color:var(--white); }
+
+.empty,.loading{ grid-column:1/-1; text-align:center; padding:70px 20px; color:var(--ink-45); }
+.empty h3{ font-family:'Cormorant',serif; font-style:italic; font-size:1.7rem; color:var(--ink); margin-bottom:8px; }
+.loading{ display:flex; align-items:center; justify-content:center; gap:10px; }
+.spinner{ width:16px; height:16px; border:2px solid var(--line); border-top-color:var(--ink);
+  border-radius:50%; animation:spin .6s linear infinite; }
+@keyframes spin{ to{ transform:rotate(360deg); } }
+
+/* ---------- FLOATING WA + BACK TO TOP ---------- */
+.fc{ position:fixed; bottom:calc(22px + env(safe-area-inset-bottom,0px)); left:18px; z-index:1000; background:var(--ink); color:var(--white);
+  text-decoration:none; padding:13px 20px; border-radius:999px; font-weight:600; font-size:12px;
+  letter-spacing:.05em; display:flex; align-items:center; gap:8px; min-height:46px;
+  box-shadow:0 8px 24px rgba(0,0,0,.18); transition:transform var(--t1); }
+.fc:hover{ transform:translateY(-2px); }
+.fc svg{ width:17px; height:17px; }
+@media (max-width:480px){ .fc span{ display:none; } .fc{ width:50px; height:50px; padding:0; border-radius:50%; justify-content:center; } }
+#btt{ position:fixed; bottom:calc(22px + env(safe-area-inset-bottom,0px)); right:18px; z-index:1000; background:var(--white);
+  border:1px solid var(--line); color:var(--ink); width:44px; height:44px; border-radius:50%;
+  cursor:pointer; font-size:16px; display:none; align-items:center; justify-content:center;
+  transition:transform var(--t1); }
+#btt:hover{ transform:translateY(-2px); }
+
+footer{ text-align:center; padding:44px 20px 32px; border-top:1px solid var(--line); margin-top:20px; }
+.f-brand{ font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.08em; margin-bottom:6px; }
+.f-copy{ font-size:10.5px; letter-spacing:.08em; color:var(--ink-45); }
+
+/* ---------- LIGHTBOX ---------- */
+.lightbox{ position:fixed; inset:0; z-index:3000; background:rgba(252,252,250,.98);
+  display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden;
+  transition:opacity .3s var(--eo), visibility .3s; }
+.lightbox.open{ opacity:1; visibility:visible; }
+.lb-img{ max-width:min(92vw,900px); max-height:82vh; object-fit:contain; box-shadow:0 30px 80px rgba(0,0,0,.15); }
+.lb-close{ position:absolute; top:18px; right:18px; width:42px; height:42px; border-radius:50%;
+  background:var(--white); border:1px solid var(--line); color:var(--ink); font-size:24px;
+  line-height:1; cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:2; }
+.lb-nav{ position:absolute; top:50%; transform:translateY(-50%); width:48px; height:48px;
+  border-radius:50%; background:var(--white); border:1px solid var(--line); color:var(--ink);
+  font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.lb-prev{ left:16px; } .lb-next{ right:16px; }
+.lb-counter{ position:absolute; bottom:22px; left:50%; transform:translateX(-50%);
+  background:var(--white); border:1px solid var(--line); color:var(--ink);
+  font-size:11px; letter-spacing:.06em; padding:6px 14px; border-radius:999px; }
+@media (max-width:600px){ .lb-nav{ width:38px; height:38px; } .lb-prev{ left:8px; } .lb-next{ right:8px; } }
+
+/* ---------- CART SIDEBAR ---------- */
+.cart-overlay{ position:fixed; inset:0; background:rgba(10,10,10,.35); z-index:1900;
+  opacity:0; visibility:hidden; transition:opacity var(--t2), visibility var(--t2); }
+.cart-overlay.open{ opacity:1; visibility:visible; }
+.cart-panel{ position:fixed; top:0; right:0; height:100dvh; width:min(400px,92vw); background:var(--white);
+  z-index:1950; box-shadow:-14px 0 50px rgba(0,0,0,.12); display:flex; flex-direction:column;
+  transform:translateX(100%); transition:transform var(--t2) var(--eo); }
+.cart-panel.open{ transform:none; }
+.cart-head{ padding:22px 22px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; }
+.cart-head h3{ font-family:'Cormorant',serif; font-style:italic; font-size:1.4rem; }
+.cart-close{ background:none; border:none; font-size:26px; cursor:pointer; color:var(--ink); line-height:1; }
+.cart-items{ flex:1; overflow-y:auto; padding:18px 22px; }
+.cart-empty{ color:var(--ink-45); font-size:13px; text-align:center; margin-top:40px; }
+.cart-line{ display:flex; gap:12px; align-items:flex-start; padding:14px 0; border-bottom:1px solid var(--surface); }
+.cart-line-img{ width:56px; height:70px; object-fit:cover; background:var(--surface); flex-shrink:0; }
+.cart-line-info{ flex:1; min-width:0; }
+.cart-line-name{ font-size:13px; font-weight:500; line-height:1.3; }
+.cart-line-meta{ font-size:11px; color:var(--ink-45); margin-top:3px; }
+.cart-line-remove{ background:none; border:none; color:var(--ink-45); font-size:20px; cursor:pointer;
+  line-height:1; padding:2px; flex-shrink:0; }
+.cart-line-remove:hover{ color:var(--ink); }
+.cart-foot{ padding:18px 22px calc(22px + env(safe-area-inset-bottom,0px)); border-top:1px solid var(--line); }
+.cart-total{ display:flex; justify-content:space-between; font-size:13.5px; font-weight:600; margin-bottom:14px; }
+.cart-checkout{ width:100%; padding:15px; background:var(--ink); color:var(--white); border:none;
+  font-size:11.5px; font-weight:600; letter-spacing:.12em; text-transform:uppercase; cursor:pointer;
+  transition:background var(--t1); }
+.cart-checkout:hover{ background:#2a2a2a; }
+.cart-checkout:disabled{ opacity:.4; cursor:default; }
+
+[hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="announce">PREMIUM AUTHENTIC SNEAKERS, APPAREL &amp; FRAGRANCES</div>
+
+<header>
+  <a href="index.html" class="logo-mark">SWOOSH</a>
+  <nav class="header-nav">
+    <a href="index.html">Home</a>
+    <a href="shop.html?gender=women" id="navWomen" data-gender="women">Women</a>
+    <a href="shop.html?gender=men" id="navMen" data-gender="men">Men</a>
+    <a href="shop.html?type=sunglasses" id="navSunglasses">Sunglasses</a>
+    <a href="shop.html?type=umbrellas" id="navUmbrellas">Umbrellas</a>
+    <button class="bag-btn" id="bagBtn" aria-label="Your bag" type="button">
+      Bag (<span class="bag-badge" id="bagBadge">0</span>)
+    </button>
+  </nav>
+</header>
+
+<div class="gender-hero no-photo" id="genderHero">
+  <div class="gender-hero-text">
+    <h1 id="heroTitle">SWOOSH</h1>
+    <p id="heroSubtitle">The Premium Curated Edit</p>
+  </div>
+</div>
+
+<div class="search-wrap">
+  <div class="search-box">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    <input type="text" id="searchInput" placeholder="Search brands &amp; items (e.g. Dior, Nike)">
+  </div>
+</div>
+
+<section class="cat-section">
+  <div class="cat-section-head">
+    <h2 class="cat-eyebrow">Shop the Collection</h2>
+  </div>
+  <div class="cat-grid" id="catGrid"></div>
+</section>
+
+
+<main>
+  <div class="sec-head">
+    <h2 class="sec-title" id="secTitle">Editorial</h2>
+    <span class="sec-count" id="secCount"></span>
+  </div>
+  <div id="demoNote" hidden></div>
+  <div class="grid" id="grid">
+    <div class="loading"><div class="spinner"></div><span>Loading…</span></div>
+  </div>
+</main>
+
+<footer>
+  <div class="f-brand">SWOOSH</div>
+  <p class="f-copy">&copy; 2026 All Rights Reserved</p>
+</footer>
+
+<a href="https://wa.me/8801575619905?text=Hi!%20I'm%20interested%20in%20your%20products." class="fc" target="_blank" rel="noopener">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  <span>Order</span>
+</a>
+<button id="btt" onclick="scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">&uarr;</button>
+
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lbClose" type="button" aria-label="Close">&times;</button>
+  <button class="lb-nav lb-prev" id="lbPrev" type="button" aria-label="Previous">&lsaquo;</button>
+  <img class="lb-img" id="lbImg" src="" alt="">
+  <button class="lb-nav lb-next" id="lbNext" type="button" aria-label="Next">&rsaquo;</button>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
+<div class="cart-overlay" id="cartOverlay"></div>
+<aside class="cart-panel" id="cartPanel">
+  <div class="cart-head">
+    <h3>Your Bag</h3>
+    <button class="cart-close" id="cartClose" type="button" aria-label="Close bag">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot">
+    <div class="cart-total" id="cartTotal" hidden></div>
+    <button class="cart-checkout" id="cartCheckout" type="button">Checkout via WhatsApp</button>
+  </div>
+</aside>
+
+<script type="module">
+'use strict';
+
+const WA = '8801575619905';
+const PLACEHOLDER_IMG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500"%3E%3Crect fill="%23F1F1EE" width="400" height="500"/%3E%3C/svg%3E';
+
+function esc(str){ return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function svgPlaceholder(label, tone){
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect fill="${tone}" width="400" height="400"/><rect x="14" y="14" width="372" height="372" fill="none" stroke="rgba(10,10,10,.2)" stroke-width="2"/><text x="200" y="208" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="26" fill="rgba(10,10,10,.62)" text-anchor="middle">${label}</text></svg>`;
+  return 'data:image/svg+xml,' + encodeURIComponent(svg);
+}
+
+const TYPE_OPTIONS = [
+  ['sneakers','Sneakers','#EDEDE8'], ['slides','Slides','#EEEBE5'],
+  ['formal_shirts_pants','Formal Shirts & Pants','#EDEAE4'], ['joggers_trousers','Joggers & Trousers','#EFECE6'],
+  ['dropshoulder_tshirts','Dropshoulder T-Shirts','#E9E6E0'], ['watches','Watches','#EAE7E1'],
+  ['heels_sandals','Heels & Sandals','#ECE9E3'], ['tops','Tops','#E8E5DF'], ['gowns','Gowns','#EAE7E1'],
+  ['jewellery','Jewellery','#EFECE6'], ['bags','Bags & Accessories','#EDEDE8'],
+  ['sunglasses','Sunglasses','#E9E6E0'], ['fragrance','Fragrance','#ECE9E3'], ['umbrellas','Umbrellas','#E8E5DF'],
+];
+const TYPE_LABEL = Object.fromEntries(TYPE_OPTIONS.map(([v,l]) => [v,l]));
+const MEN_TYPES = ['sneakers','slides','formal_shirts_pants','joggers_trousers','dropshoulder_tshirts','watches','fragrance'];
+const WOMEN_TYPES = ['sneakers','heels_sandals','tops','gowns','jewellery','bags','watches','fragrance'];
+
+const DEMO_PRODUCTS = [
+  { id:'demo1', name:'Air Jordan 1 Mid Blush', brand:'Nike', price:'৳ 14,500', gender:'men', type:'sneakers', inStock:true, isNewArrival:true, photos:[svgPlaceholder('Nike — Sneaker','#EDEDE8'), svgPlaceholder('Side view','#E7E7E1')] },
+  { id:'demo2', name:'Cross-Strap Slides', brand:'Louis Vuitton', price:'৳ 5,900', gender:'men', type:'slides', inStock:true, isNewArrival:false, photos:[svgPlaceholder('LV — Slides','#EEEBE5')] },
+  { id:'demo3', name:'Oversized Drop-Shoulder Tee', brand:'Balenciaga', price:'৳ 3,800', gender:'men', type:'dropshoulder_tshirts', inStock:true, isNewArrival:true, photos:[svgPlaceholder('Balenciaga — Tee','#E9E6E0')] },
+  { id:'demo4', name:'Chronograph Watch', brand:'Richard Mille', price:'৳ 22,000', gender:'men', type:'watches', inStock:true, isNewArrival:false, photos:[svgPlaceholder('Watch','#EAE7E1')] },
+  { id:'demo5', name:'Signature Cologne', brand:'Dior', price:'৳ 7,600', gender:'men', type:'fragrance', inStock:true, isNewArrival:false, photos:[svgPlaceholder('Dior — Cologne','#E8E5DF')] },
+  { id:'demo6', name:'Everyday Runner', brand:'Adidas', price:'৳ 5,200', gender:'women', type:'sneakers', inStock:true, isNewArrival:false, photos:[svgPlaceholder('Adidas — Sneaker','#EFECE6')] },
+  { id:'demo7', name:'Strappy Heeled Sandal', brand:'Gucci', price:'৳ 9,400', gender:'women', type:'heels_sandals', inStock:true, isNewArrival:true, photos:[svgPlaceholder('Gucci — Heels','#ECE9E3')] },
+  { id:'demo8', name:'Structured Tote Bag', brand:'Louis Vuitton', price:'৳ 15,500', gender:'women', type:'bags', inStock:true, isNewArrival:false, photos:[svgPlaceholder('Louis Vuitton — Bag','#EDEDE8')] },
+  { id:'demo9', name:'Eau de Parfum 100ml', brand:'Chanel', price:'৳ 8,200', gender:'women', type:'fragrance', inStock:true, isNewArrival:true, photos:[svgPlaceholder('Chanel — Fragrance','#ECE9E3')] },
+  { id:'demo10', name:'Aviator Sunglasses', brand:'Dior', price:'৳ 4,400', gender:'unisex', type:'sunglasses', inStock:true, isNewArrival:false, photos:[svgPlaceholder('Dior — Eyewear','#E9E6E0')] },
+  { id:'demo11', name:'Auto-Open Folding Umbrella', brand:'Burberry', price:'৳ 3,200', gender:'unisex', type:'umbrellas', inStock:true, isNewArrival:true, photos:[svgPlaceholder('Burberry — Umbrella','#E8E5DF')] },
+];
+
+const params = new URLSearchParams(location.search);
+const urlType = params.get('type');
+const FIXED_TYPE_SECTIONS = ['sunglasses', 'umbrellas'];
+const isTypeSection = FIXED_TYPE_SECTIONS.includes(urlType);
+
+const state = {
+  products: [], isDemo: false,
+  mode: isTypeSection ? 'section' : 'gender',
+  gender: (!isTypeSection && (params.get('gender') === 'men' || params.get('gender') === 'women')) ? params.get('gender') : '',
+  type: isTypeSection ? urlType : '', search: '',
+  cart: loadCart(),
+};
+
+const grid = document.getElementById('grid');
+const heroTitle = document.getElementById('heroTitle');
+const heroSubtitle = document.getElementById('heroSubtitle');
+const genderHero = document.getElementById('genderHero');
+const secTitle = document.getElementById('secTitle');
+const secCount = document.getElementById('secCount');
+const demoNote = document.getElementById('demoNote');
+const catGrid = document.getElementById('catGrid');
+const searchInput = document.getElementById('searchInput');
+
+/* ---------------- Firebase (dynamic import; falls back to demo items if blocked) --------------- */
+const firebaseConfig = {
+  apiKey: "AIzaSyDWBiKKfOQHAhYW5DGVeC3e58IaI3Ltm9E",
+  authDomain: "swoosh-database.firebaseapp.com",
+  projectId: "swoosh-database",
+  storageBucket: "swoosh-database.firebasestorage.app",
+  messagingSenderId: "911580207883",
+  appId: "1:911580207883:web:be3353bb762a38066c600e",
+  measurementId: "G-6FV9QQF6LR"
+};
+
+async function boot(){
+  try {
+    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js');
+    const { getFirestore, collection, onSnapshot } = await import('https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js');
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    onSnapshot(collection(db, 'products'), (snap) => {
+      const live = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      if (live.length){ state.products = live; state.isDemo = false; }
+      else { state.products = DEMO_PRODUCTS; state.isDemo = true; }
+      renderAll();
+    }, () => useDemo());
+  } catch (err) { useDemo(); }
+}
+function useDemo(){ state.products = DEMO_PRODUCTS; state.isDemo = true; renderAll(); }
+boot();
+
+/* ---------------- Filtering ---------------- */
+function inGender(p){ return !state.gender || p.gender === state.gender || p.gender === 'unisex'; }
+
+function getFiltered(){
+  const s = state.search.trim().toLowerCase();
+  return state.products.filter(p => {
+    if (!inGender(p)) return false;
+    if (state.type && p.type !== state.type) return false;
+    if (s && !(`${p.name} ${p.brand || ''}`.toLowerCase().includes(s))) return false;
+    return true;
+  });
+}
+
+/* ---------------- Category picture grid ---------------- */
+function representativePhoto(type){
+  const match = state.products.find(p => p.type === type && inGender(p) && Array.isArray(p.photos) && p.photos.length && p.inStock !== false);
+  return match ? match.photos[0] : null;
+}
+
+function renderCatGrid(){
+  if (state.mode === 'section'){
+    const genderTiles = [
+      { value:'', label:'All', tone:'#F1F1EE' },
+      { value:'men', label:"Men's", tone:'#EDEDE8' },
+      { value:'women', label:"Women's", tone:'#EFECE6' },
+      { value:'unisex', label:'Unisex', tone:'#EAE7E1' },
+    ];
+    catGrid.innerHTML = genderTiles.map(t => {
+      const photo = t.value ? (representativePhotoForGender(t.value) || svgPlaceholder(t.label, t.tone)) : svgPlaceholder('View All', t.tone);
+      const active = state.gender === t.value;
+      return `
+      <button class="cat-tile${active ? ' active' : ''}" type="button" data-gender-tile="${esc(t.value)}">
+        <div class="cat-tile-img"><img src="${esc(photo)}" alt="${esc(t.label)}" loading="lazy"></div>
+        <span class="cat-tile-label">${esc(t.label)}</span>
+      </button>`;
+    }).join('');
+    return;
+  }
+  const typeKeys = state.gender === 'men' ? MEN_TYPES : state.gender === 'women' ? WOMEN_TYPES : TYPE_OPTIONS.map(t => t[0]);
+  const typeMap = Object.fromEntries(TYPE_OPTIONS.map(t => [t[0], t]));
+  const tiles = [{ value:'', label:'All', tone:'#F1F1EE' }, ...typeKeys.map(k => ({ value:k, label:typeMap[k][1], tone:typeMap[k][2] }))];
+  catGrid.innerHTML = tiles.map(t => {
+    const photo = t.value ? (representativePhoto(t.value) || svgPlaceholder(t.label, t.tone)) : svgPlaceholder('View All', t.tone);
+    const active = state.type === t.value;
+    return `
+    <button class="cat-tile${active ? ' active' : ''}" type="button" data-type="${esc(t.value)}">
+      <div class="cat-tile-img"><img src="${esc(photo)}" alt="${esc(t.label)}" loading="lazy"></div>
+      <span class="cat-tile-label">${esc(t.label)}</span>
+    </button>`;
+  }).join('');
+}
+function representativePhotoForGender(genderValue){
+  const match = state.products.find(p => p.type === state.type && (p.gender === genderValue || (genderValue !== 'unisex' && p.gender === 'unisex')) && Array.isArray(p.photos) && p.photos.length && p.inStock !== false);
+  return match ? match.photos[0] : null;
+}
+catGrid.addEventListener('click', (e) => {
+  const btn = e.target.closest('.cat-tile');
+  if (!btn) return;
+  if (state.mode === 'section') state.gender = btn.dataset.genderTile;
+  else state.type = btn.dataset.type;
+  renderAll();
+  document.querySelector('main').scrollIntoView({ behavior: 'smooth', block: 'start' });
+});
+
+searchInput.addEventListener('input', () => { state.search = searchInput.value; renderAll(); });
+
+/* ---------------- Gender hero (uses a real product photo when available) ---------------- */
+function setHeroImage(){
+  const candidates = state.products.filter(p => {
+    if (!inGender(p)) return false;
+    if (state.mode === 'section' && p.type !== state.type) return false;
+    return Array.isArray(p.photos) && p.photos.length && p.inStock !== false && !p.id?.startsWith?.('demo');
+  });
+  const pick = candidates.find(p => p.isNewArrival) || candidates[0];
+  if (pick){
+    genderHero.style.backgroundImage = `url("${pick.photos[0]}")`;
+    genderHero.classList.remove('no-photo');
+  } else {
+    genderHero.style.backgroundImage = '';
+    genderHero.classList.add('no-photo');
+  }
+}
+
+/* ---------------- Rendering ---------------- */
+function renderAll(){
+  document.getElementById('navWomen').classList.toggle('active', state.gender === 'women' && state.mode === 'gender');
+  document.getElementById('navMen').classList.toggle('active', state.gender === 'men' && state.mode === 'gender');
+  document.getElementById('navSunglasses').classList.toggle('active', state.mode === 'section' && state.type === 'sunglasses');
+  document.getElementById('navUmbrellas').classList.toggle('active', state.mode === 'section' && state.type === 'umbrellas');
+  if (state.mode === 'section'){
+    heroTitle.textContent = TYPE_LABEL[state.type] || 'SWOOSH';
+    heroSubtitle.textContent = 'The Premium Curated Edit';
+  } else {
+    heroTitle.textContent = state.gender === 'men' ? "Men's Exclusives" : state.gender === 'women' ? "Women's Exclusives" : 'SWOOSH';
+    heroSubtitle.textContent = state.gender ? 'The Premium Curated Edit' : 'Imported · Authenticated · Nationwide Delivery';
+  }
+  setHeroImage();
+  if (state.mode === 'section'){
+    secTitle.textContent = state.gender ? (state.gender === 'men' ? "Men's" : state.gender === 'women' ? "Women's" : 'Unisex') + ' ' + TYPE_LABEL[state.type] : TYPE_LABEL[state.type];
+  } else {
+    secTitle.textContent = state.type ? TYPE_LABEL[state.type] : (state.gender ? (state.gender === 'men' ? "Men's Collection" : "Women's Collection") : 'Editorial');
+  }
+  renderCatGrid();
+  demoNote.hidden = !state.isDemo;
+  if (state.isDemo){
+    demoNote.innerHTML = '<b>Demo preview.</b> These are sample items so you can see the design. Add your own products from the admin panel — they will replace this automatically.';
+    demoNote.style.cssText = 'background:var(--surface);border:1px solid var(--line);padding:12px 16px;font-size:11.5px;color:var(--ink-70);margin-bottom:22px;line-height:1.5;';
+  }
+  const list = getFiltered();
+  secCount.textContent = `[ ${list.length} ITEM${list.length === 1 ? '' : 'S'} ]`;
+  renderGrid(list);
+  renderCartBadge();
+}
+
+function cardHtml(p){
+  const photos = (Array.isArray(p.photos) && p.photos.length) ? p.photos : [PLACEHOLDER_IMG];
+  const multi = photos.length > 1;
+  const w = encodeURIComponent(`Hi! I'm interested in "${p.name}" (${p.price}). Can you help?`);
+  const outOfStock = p.inStock === false;
+  return `
+  <div class="card">
+    <div class="c-img" data-idx="0" data-photos="${esc(JSON.stringify(photos))}">
+      ${photos.map((url,i) => `<img src="${esc(url)}" class="main-img${i===0?' on':''}" alt="${esc(p.name)}" loading="lazy">`).join('')}
+      ${p.isNewArrival ? '<span class="tag tag-new">New</span>' : '<span class="tag">Premium</span>'}
+      ${multi ? `<div class="c-count">1/${photos.length}</div><button type="button" class="c-nav c-prev" aria-label="Previous photo">‹</button><button type="button" class="c-nav c-next" aria-label="Next photo">›</button><div class="c-dots">${photos.map((_,i)=>`<span class="c-dot${i===0?' on':''}" data-i="${i}"></span>`).join('')}</div>` : ''}
+    </div>
+    <div class="c-body">
+      ${p.brand ? `<div class="c-brand">${esc(p.brand)}</div>` : ''}
+      <div class="c-name">${esc(p.name)}</div>
+      <div class="c-price">${outOfStock ? `<span class="out-of-stock">${esc(p.price)}</span> · Sold out` : esc(p.price)}</div>
+      <div class="btn-row">
+        <button type="button" class="bag-add-btn" data-add-id="${esc(p.id)}" ${outOfStock ? 'disabled' : ''}>+ Add to Bag</button>
+        <a href="https://wa.me/${WA}?text=${w}" target="_blank" rel="noopener" class="order-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Order Now
+        </a>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderGrid(list){
+  if (!list.length){
+    grid.innerHTML = `<div class="empty"><h3>No items found</h3><p>Try a different category or search term.</p></div>`;
+    return;
+  }
+  grid.innerHTML = list.map(cardHtml).join('');
+  observe();
+}
+
+let obs;
+function observe(){
+  if (obs) obs.disconnect();
+  obs = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting){ en.target.classList.add('vis'); obs.unobserve(en.target); } });
+  }, { threshold: .06 });
+  document.querySelectorAll('.card').forEach(c => obs.observe(c));
+}
+
+/* ---------------- Add to Bag ---------------- */
+grid.addEventListener('click', (e) => {
+  const addBtn = e.target.closest('[data-add-id]');
+  if (!addBtn || addBtn.disabled) return;
+  const product = state.products.find(p => p.id === addBtn.dataset.addId);
+  if (!product) return;
+  addToBag(product);
+  const original = addBtn.textContent;
+  addBtn.textContent = 'Added ✓';
+  setTimeout(() => { addBtn.textContent = original; }, 1100);
+});
+
+/* ---------------- Multi-photo carousel ---------------- */
+function setActivePhoto(cImg, idx){
+  const imgs = cImg.querySelectorAll('.main-img');
+  const total = imgs.length;
+  if (!total) return;
+  idx = ((idx % total) + total) % total;
+  imgs.forEach((img,i) => img.classList.toggle('on', i === idx));
+  cImg.querySelectorAll('.c-dot').forEach((d,i) => d.classList.toggle('on', i === idx));
+  const countEl = cImg.querySelector('.c-count');
+  if (countEl) countEl.textContent = `${idx+1}/${total}`;
+  cImg.dataset.idx = idx;
+}
+
+let gallerySwiped = false;
+let galleryTouchX = null;
+
+grid.addEventListener('click', (e) => {
+  if (e.target.closest('[data-add-id]')) return;
+  if (gallerySwiped){ gallerySwiped = false; return; }
+  const cImg = e.target.closest('.c-img');
+  if (!cImg) return;
+  const nav = e.target.closest('.c-nav');
+  const dot = e.target.closest('.c-dot');
+  if (nav || dot){
+    e.preventDefault();
+    let idx = Number(cImg.dataset.idx || 0);
+    if (dot) idx = Number(dot.dataset.i);
+    else if (nav.classList.contains('c-prev')) idx -= 1;
+    else idx += 1;
+    setActivePhoto(cImg, idx);
+    return;
+  }
+  let photosArr = [];
+  try { photosArr = JSON.parse(cImg.dataset.photos || '[]'); } catch (err) { photosArr = []; }
+  if (photosArr.length) openLightbox(photosArr, Number(cImg.dataset.idx || 0));
+});
+
+grid.addEventListener('touchstart', (e) => {
+  const cImg = e.target.closest('.c-img');
+  galleryTouchX = cImg ? e.touches[0].clientX : null;
+}, { passive: true });
+
+grid.addEventListener('touchend', (e) => {
+  const cImg = e.target.closest('.c-img');
+  if (!cImg || galleryTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - galleryTouchX;
+  if (Math.abs(dx) > 40){ setActivePhoto(cImg, Number(cImg.dataset.idx || 0) + (dx < 0 ? 1 : -1)); gallerySwiped = true; }
+  galleryTouchX = null;
+}, { passive: true });
+
+/* ---------------- Lightbox ---------------- */
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbCounter = document.getElementById('lbCounter');
+const lbPrev = document.getElementById('lbPrev');
+const lbNext = document.getElementById('lbNext');
+const lbClose = document.getElementById('lbClose');
+let lbPhotos = [], lbIndex = 0;
+
+function openLightbox(photosArr, index){
+  lbPhotos = photosArr; lbIndex = index; renderLightbox();
+  lightbox.classList.add('open'); document.body.style.overflow = 'hidden';
+}
+function renderLightbox(){
+  lbImg.src = lbPhotos[lbIndex];
+  const multi = lbPhotos.length > 1;
+  lbCounter.textContent = `${lbIndex+1} / ${lbPhotos.length}`;
+  lbCounter.style.display = multi ? 'block' : 'none';
+  lbPrev.style.display = multi ? 'flex' : 'none';
+  lbNext.style.display = multi ? 'flex' : 'none';
+}
+function closeLightbox(){ lightbox.classList.remove('open'); document.body.style.overflow = ''; }
+lbClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+lbPrev.addEventListener('click', () => { lbIndex = (lbIndex - 1 + lbPhotos.length) % lbPhotos.length; renderLightbox(); });
+lbNext.addEventListener('click', () => { lbIndex = (lbIndex + 1) % lbPhotos.length; renderLightbox(); });
+document.addEventListener('keydown', e => {
+  if (lightbox.classList.contains('open')){
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') lbPrev.click();
+    if (e.key === 'ArrowRight') lbNext.click();
+  }
+  if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart();
+});
+let lbTouchX = null;
+lightbox.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+lightbox.addEventListener('touchend', e => {
+  if (lbTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - lbTouchX;
+  if (Math.abs(dx) > 40) (dx < 0 ? lbNext : lbPrev).click();
+  lbTouchX = null;
+}, { passive: true });
+
+/* ---------------- Shopping bag (cart) ---------------- */
+function loadCart(){
+  try { return JSON.parse(localStorage.getItem('swoosh_cart') || '[]'); } catch (err) { return []; }
+}
+function saveCart(){
+  try { localStorage.setItem('swoosh_cart', JSON.stringify(state.cart)); } catch (err) { /* ignore */ }
+}
+function addToBag(product){
+  const existing = state.cart.find(i => i.id === product.id);
+  if (existing) existing.qty += 1;
+  else state.cart.push({ id: product.id, name: product.name, brand: product.brand || '', price: product.price, photo: product.photos?.[0] || '', qty: 1 });
+  saveCart();
+  renderCartBadge();
+  renderCartPanel();
+}
+function removeFromBag(id){
+  state.cart = state.cart.filter(i => i.id !== id);
+  saveCart();
+  renderCartBadge();
+  renderCartPanel();
+}
+function parsePrice(str){
+  const m = String(str).replace(/,/g, '').match(/[\d.]+/);
+  return m ? parseFloat(m[0]) : null;
+}
+function cartTotal(){
+  let sum = 0;
+  for (const item of state.cart){
+    const v = parsePrice(item.price);
+    if (v === null) return null;
+    sum += v * item.qty;
+  }
+  return sum;
+}
+function renderCartBadge(){
+  const count = state.cart.reduce((n, i) => n + i.qty, 0);
+  document.getElementById('bagBadge').textContent = count;
+}
+function renderCartPanel(){
+  const wrap = document.getElementById('cartItems');
+  if (!state.cart.length){
+    wrap.innerHTML = '<p class="cart-empty">Your bag is empty.</p>';
+  } else {
+    wrap.innerHTML = state.cart.map(i => `
+      <div class="cart-line">
+        <img class="cart-line-img" src="${esc(i.photo || PLACEHOLDER_IMG)}" alt="">
+        <div class="cart-line-info">
+          <div class="cart-line-name">${esc(i.name)}</div>
+          <div class="cart-line-meta">${i.brand ? esc(i.brand) + ' · ' : ''}${esc(i.price)}${i.qty > 1 ? ' × ' + i.qty : ''}</div>
+        </div>
+        <button class="cart-line-remove" data-remove-id="${esc(i.id)}" type="button" aria-label="Remove">&times;</button>
+      </div>`).join('');
+  }
+  const totalEl = document.getElementById('cartTotal');
+  const total = cartTotal();
+  if (total !== null && state.cart.length){
+    totalEl.hidden = false;
+    totalEl.innerHTML = `<span>Estimated total</span><span>৳ ${total.toLocaleString()}</span>`;
+  } else {
+    totalEl.hidden = true;
+  }
+  document.getElementById('cartCheckout').disabled = state.cart.length === 0;
+}
+document.getElementById('cartItems').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-remove-id]');
+  if (btn) removeFromBag(btn.dataset.removeId);
+});
+
+const cartPanel = document.getElementById('cartPanel');
+const cartOverlay = document.getElementById('cartOverlay');
+function openCart(){ renderCartPanel(); cartPanel.classList.add('open'); cartOverlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function closeCart(){ cartPanel.classList.remove('open'); cartOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('bagBtn').addEventListener('click', openCart);
+document.getElementById('cartClose').addEventListener('click', closeCart);
+cartOverlay.addEventListener('click', closeCart);
+
+document.getElementById('cartCheckout').addEventListener('click', () => {
+  if (!state.cart.length) return;
+  let msg = "Hi! I'd like to order:\n\n";
+  state.cart.forEach((item, i) => {
+    msg += `${i+1}. ${item.name}${item.brand ? ' (' + item.brand + ')' : ''} — ${item.price}${item.qty > 1 ? ' x' + item.qty : ''}\n`;
+  });
+  const total = cartTotal();
+  if (total !== null) msg += `\nEstimated total: ৳ ${total.toLocaleString()}`;
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank');
+});
+
+/* ---------------- Scroll progress / back to top ---------------- */
+const btt = document.getElementById('btt');
+window.addEventListener('scroll', () => { btt.style.display = scrollY > 600 ? 'flex' : 'none'; }, { passive: true });
+</script>
+</body>
+</html>
