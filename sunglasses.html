@@ -238,6 +238,16 @@
             width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 50px auto;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* 144Hz Ultra Smooth GPU Hardware Acceleration */
+*, .product-card, .category-item, .slider-container, .slider-btn, .btn-bag, .btn-order {
+    -webkit-font-smoothing: antialiased;
+    transform: translateZ(0);
+}
+
+.slider-container, .product-card, .category-item img, .btn-bag, .btn-order {
+    will-change: transform;
+}
     </style>
 </head>
 <body>
