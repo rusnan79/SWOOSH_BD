@@ -111,56 +111,21 @@ function svgPlaceholder(label, tone){
   return 'data:image/svg+xml,' + encodeURIComponent(svg);
 }
 
-const FALLBACK = {
-  men: svgPlaceholder('Men', '#EDEDE8'),
-  women: svgPlaceholder('Women', '#EFECE6'),
-  sunglasses: svgPlaceholder('Sunglasses', '#E9E6E0'),
-  umbrellas: svgPlaceholder('Umbrellas', '#E8E5DF'),
+// Niche apnar nijossho chobir link gulo bosiye din
+const FIXED_IMAGES = {
+  men: 'men.jpg',       // Ekhane Men box-er chobir nam din
+  women: 'women.jpg',   // Ekhane Women box-er chobir nam din
+  sunglasses: 'sunglass.jpg',// Ekhane Sunglasses box-er chobir nam din
+  umbrellas: 'umbrella.jpg'  // Ekhane Umbrellas box-er chobir nam din
 };
 
-// Show fallback tiles immediately so the page never looks broken while Firebase loads.
-document.getElementById('tileMen').src = FALLBACK.men;
-document.getElementById('tileWomen').src = FALLBACK.women;
-document.getElementById('tileSunglasses').src = FALLBACK.sunglasses;
-document.getElementById('tileUmbrellas').src = FALLBACK.umbrellas;
+// Chobi thakle chobi dekhabe, na thakle ager moto color block dekhabe
+document.getElementById('tileMen').src = FIXED_IMAGES.men || svgPlaceholder('Men', '#EDEDE8');
+document.getElementById('tileWomen').src = FIXED_IMAGES.women || svgPlaceholder('Women', '#EFECE6');
+document.getElementById('tileSunglasses').src = FIXED_IMAGES.sunglasses || svgPlaceholder('Sunglasses', '#E9E6E0');
+document.getElementById('tileUmbrellas').src = FIXED_IMAGES.umbrellas || svgPlaceholder('Umbrellas', '#E8E5DF');
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDWBiKKfOQHAhYW5DGVeC3e58IaI3Ltm9E",
-  authDomain: "swoosh-database.firebaseapp.com",
-  projectId: "swoosh-database",
-  storageBucket: "swoosh-database.firebasestorage.app",
-  messagingSenderId: "911580207883",
-  appId: "1:911580207883:web:be3353bb762a38066c600e",
-  measurementId: "G-6FV9QQF6LR"
-};
-
-function pickPhoto(products, matcher){
-  const candidates = products.filter(p => matcher(p) && Array.isArray(p.photos) && p.photos.length && p.inStock !== false);
-  const chosen = candidates.find(p => p.isNewArrival) || candidates[0];
-  return chosen ? chosen.photos[0] : null;
-}
-
-async function boot(){
-  try {
-    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js');
-    const { getFirestore, collection, onSnapshot } = await import('https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js');
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    onSnapshot(collection(db, 'products'), (snap) => {
-      const products = snap.docs.map(d => d.data());
-      if (!products.length) return; // keep fallback tiles
-      const menPhoto = pickPhoto(products, p => p.gender === 'men' || p.gender === 'unisex');
-      const womenPhoto = pickPhoto(products, p => p.gender === 'women' || p.gender === 'unisex');
-      const sunglassesPhoto = pickPhoto(products, p => p.type === 'sunglasses');
-      const umbrellasPhoto = pickPhoto(products, p => p.type === 'umbrellas');
-      if (menPhoto) document.getElementById('tileMen').src = menPhoto;
-      if (womenPhoto) document.getElementById('tileWomen').src = womenPhoto;
-      if (sunglassesPhoto) document.getElementById('tileSunglasses').src = sunglassesPhoto;
-      if (umbrellasPhoto) document.getElementById('tileUmbrellas').src = umbrellasPhoto;
-    });
-  } catch (err) { /* keep fallback tiles */ }
-}
-boot();
+// Note: index page-e ekhon fixed chobi thakay Firebase theke auto-fetch korar code ti bad deya hoyeche.
 </script>
 
 </body>
