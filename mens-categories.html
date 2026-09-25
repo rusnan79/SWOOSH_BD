@@ -22,11 +22,39 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
-        .brand-logo { 
-            height: 38px; 
-            object-fit: contain; 
-            filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(255,255,255,0.2)); 
-        }
+      .brand-logo-area {
+    display: flex;
+    align-items: center; 
+    gap: 12px;
+    text-decoration: none;
+}
+
+.brand-logo {
+    height: 38px;
+    object-fit: contain;
+    filter: brightness(0) invert(1) drop-shadow(0 2px 4px rgba(255,255,255,0.2));
+    display: block;
+}
+
+.brand-text {
+    color: #ffffff;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+@media (max-width: 768px) {
+    .brand-text {
+        font-size: 18px;
+        letter-spacing: 2px;
+    }
+    .brand-logo {
+        height: 30px;
+    }
+}
 
         .nav-links { display: flex; gap: 30px; align-items: center; }
         .nav-links a {
