@@ -488,7 +488,28 @@ function renderCatGrid(){
     </button>`;
   }).join('');
 }
-function representativePhotoForGender(genderValue){
+function representativePhotoForGender(genderValue) {
+  let fixedImg = '';
+
+  // 1. Sunglasses er vitorer category chobi
+  if (state.type === 'sunglasses') {
+    if (genderValue === 'men') fixedImg = 'sunglasses_men.jpg';
+    else if (genderValue === 'women') fixedImg = 'sunglassess_women.jpg';
+    else if (genderValue === 'unisex') fixedImg = 'sunglass.jpg';
+  } 
+  // 2. Umbrellas er vitorer category chobi
+  else if (state.type === 'umbrellas') {
+    if (genderValue === 'men') fixedImg = 'classic_umbrella.jpg';
+    else if (genderValue === 'women') fixedImg = 'cover_umbrella.jpg';
+    else if (genderValue === 'unisex') fixedImg = 'folding_umbrella.jpg';
+  }
+
+  // Jodi upore fixed chobir nam pawa jay, seta dekhabe
+  if (fixedImg !== '') {
+    return fixedImg;
+  }
+
+  // Fixed chobi set kora na thakle, automatic fetch korbe
   const match = state.products.find(p => p.type === state.type && (p.gender === genderValue || (genderValue !== 'unisex' && p.gender === 'unisex')) && Array.isArray(p.photos) && p.photos.length && p.inStock !== false);
   return match ? match.photos[0] : null;
 }
