@@ -415,10 +415,46 @@ function getFiltered(){
 }
 
 /* ---------------- Category picture grid ---------------- */
-function representativePhoto(type){
+function representativePhoto(type) {
+  let fixedImg = '';
+
+  // 1. Men (Cheleder) Category er Chobi
+  if (state.gender === 'men') {
+    if (type === 'sneakers') fixedImg = 'sneakers_men.jpg'; 
+    else if (type === 'slides') fixedImg = 'slide.jpg';
+    else if (type === 'formal_shirts_pants') fixedImg = 'download.jpg';
+    else if (type === 'joggers_trousers') fixedImg = 'joggers.jpg';
+    else if (type === 'dropshoulder_tshirts') fixedImg = 'tshirt_men.jpg';
+    else if (type === 'watches') fixedImg = 'watch.jpg';
+    else if (type === 'fragrance') fixedImg = 'perfume_men.jpg';
+  } 
+  
+  // 2. Women (Meyeder) Category er Chobi
+  else if (state.gender === 'women') {
+    if (type === 'sneakers') fixedImg = 'sneakers_women.jpg';
+    else if (type === 'heels_sandals') fixedImg = 'heels_women.jpg';
+    else if (type === 'tops') fixedImg = 'tops_women.jpg';
+    else if (type === 'gowns') fixedImg = '/gown_women.jpg';
+    else if (type === 'jewellery') fixedImg = 'jewellary_women.jpg';
+    else if (type === 'bags') fixedImg = 'bags_women.jpg';
+    else if (type === 'watches') fixedImg = 'watches_women.jpg';
+    else if (type === 'fragrance') fixedImg = 'perfume_women.jpg';
+  }
+
+  // 3. Main/Unisex (Sunglasses o Umbrellas)
+  if (type === 'sunglasses') fixedImg = 'sunglass.jpg';
+  else if (type === 'umbrellas') fixedImg = 'umbrella.jpg';
+
+  // Jodi upore fixed chobir nam pawa jay, seta dekhabe
+  if (fixedImg !== '') {
+    return fixedImg;
+  }
+
+  // Fixed chobi set kora na thakle, automatic fetch korbe
   const match = state.products.find(p => p.type === type && inGender(p) && Array.isArray(p.photos) && p.photos.length && p.inStock !== false);
   return match ? match.photos[0] : null;
 }
+
 
 function renderCatGrid(){
   if (state.mode === 'section'){
