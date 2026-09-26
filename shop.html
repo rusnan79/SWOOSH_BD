@@ -525,17 +525,26 @@ catGrid.addEventListener('click', (e) => {
 searchInput.addEventListener('input', () => { state.search = searchInput.value; renderAll(); });
 
 /* ---------------- Gender hero (uses a real product photo when available) ---------------- */
-function setHeroImage(){
-  const candidates = state.products.filter(p => {
-    if (!inGender(p)) return false;
-    if (state.mode === 'section' && p.type !== state.type) return false;
-    return Array.isArray(p.photos) && p.photos.length && p.inStock !== false && !p.id?.startsWith?.('demo');
-  });
-  const pick = candidates.find(p => p.isNewArrival) || candidates[0];
-  if (pick){
-    genderHero.style.backgroundImage = `url("${pick.photos[0]}")`;
+function setHeroImage() {
+  let bgImage = '';
+
+  // 1. Section (Sunglasses ebong Umbrellas) er background chobi
+  if (state.mode === 'section') {
+    if (state.type === 'sunglasses') bgImage = 'sunglass.jpg'; 
+    else if (state.type === 'umbrellas') bgImage = 'umbrella.jpg'; 
+  } 
+  // 2. Gender (Men ebong Women) er background chobi
+  else {
+    if (state.gender === 'men') bgImage = 'men.jpg'; 
+    else if (state.gender === 'women') bgImage = 'women.jpg'; 
+  }
+
+  // Chobi set kora thakle seta background e dekhabe
+  if (bgImage !== '') {
+    genderHero.style.backgroundImage = `url("${bgImage}")`;
     genderHero.classList.remove('no-photo');
   } else {
+    // Chobi deya na thakle ager moto kalo color dekhabe
     genderHero.style.backgroundImage = '';
     genderHero.classList.add('no-photo');
   }
