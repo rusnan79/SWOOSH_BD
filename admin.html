@@ -492,6 +492,10 @@
       <span class="stat-num" id="statNew">0</span>
       <span class="stat-label">New arrivals</span>
     </div>
+    <div class="stat-chip is-accent">
+      <span class="stat-num" id="statNew">0</span>
+      <span class="stat-label">Available On Pre-Order</span>
+    </div>
   </section>
 
   <section class="toolbar">
@@ -505,6 +509,7 @@
       <option value="all">All stock</option>
       <option value="in">In stock</option>
       <option value="out">Out of stock</option>
+       <option value="out">Available On Pre-Order</option>
     </select>
     <label class="chip-toggle">
       <input type="checkbox" id="newOnlyFilter">
@@ -659,6 +664,9 @@ const GENDER_OPTIONS = [
 const TYPE_OPTIONS = [
   ['sneakers', 'Sneakers'], ['slides', 'Slides'], ['formal_shirts_pants', 'Formal Shirts & Pants'],
   ['joggers_trousers', 'Joggers & Trousers'], ['dropshoulder_tshirts', 'Dropshoulder T-Shirts'],
+  ['jackets_hoodies', 'Jackets & Hoodies'],        // <-- Ekhane add kora hoyeche (Men's)
+  ['hoodies_sweater', 'Hoodies & Sweaters'],       // <-- Ekhane add kora hoyeche (Women's)
+  ['shawl', 'Shawl'],
   ['watches', 'Watches'], ['heels_sandals', 'Heels & Sandals'], ['tops', 'Tops'], ['gowns', 'Gowns'],
   ['jewellery', 'Jewellery'], ['bags', 'Bags & Accessories'], ['sunglasses', 'Sunglasses'],
   ['fragrance', 'Fragrance'], ['umbrellas', 'Umbrellas'],
