@@ -60,14 +60,8 @@
   input,select,textarea{ font-family:inherit; }
 
   ::selection{ background:var(--blue-2); color:#fff; }
-
   :focus-visible{ outline:2px solid var(--blue-2); outline-offset:2px; border-radius:4px; }
 
-  @media (prefers-reduced-motion: reduce){
-    *,*::before,*::after{ animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; scroll-behavior:auto !important; }
-  }
-
-  /* ---------- shared bits ---------- */
   .hidden{ display:none !important; }
 
   .btn{
@@ -143,7 +137,6 @@
   }
   select option, select optgroup{ background:#0A1830; color:var(--white); }
 
-  /* toggle switch */
   .toggle{ display:flex; align-items:center; gap:11px; cursor:pointer; user-select:none; }
   .toggle input{ display:none; }
   .toggle-track{
@@ -160,7 +153,6 @@
   .toggle-label{ font-size:14px; color:var(--ink-soft); font-weight:500; }
   .toggles-row{ gap:28px; flex-wrap:wrap; }
 
-  /* ---------- toast ---------- */
   .toast-host{
     position:fixed; left:0; right:0; bottom:18px; z-index:1000;
     display:flex; flex-direction:column; align-items:center; gap:10px;
@@ -183,7 +175,6 @@
   .toast.info svg{ color:var(--blue-2); }
   @keyframes toastIn{ from{ opacity:0; transform:translateY(14px); } to{ opacity:1; transform:none; } }
 
-  /* ---------- login ---------- */
   .login-view{
     min-height:100dvh; display:flex; align-items:center; justify-content:center;
     padding:32px 20px calc(32px + env(safe-area-inset-bottom));
@@ -212,7 +203,6 @@
   }
   .link-btn:hover{ color:var(--ink-soft); }
 
-  /* ---------- app shell ---------- */
   .topbar{
     position:sticky; top:0; z-index:80;
     background:#050E22; border-bottom:1px solid var(--line);
@@ -220,7 +210,7 @@
     display:flex; align-items:center; justify-content:space-between; gap:12px;
   }
   .brand{ display:flex; align-items:center; gap:11px; min-width:0; }
-  .brand-mark{ width:34px; height:34px; object-fit:contain; flex:none; }
+  .brand-mark-logo{ width:36px; height:36px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,.2); box-shadow:0 2px 10px rgba(0,0,0,.3); flex:none; }
   .brand-text{ display:flex; flex-direction:column; line-height:1.15; min-width:0; }
   .brand-name{ font-family:var(--serif); font-style:italic; font-weight:600; font-size:1.2rem; color:var(--white); }
   .brand-tag{ font-size:.62rem; letter-spacing:3px; text-transform:uppercase; color:var(--ink-dim); }
@@ -291,6 +281,7 @@
   }
   .badge-out{ background:rgba(201,42,58,.75); color:#fff; }
   .badge-new{ background:rgba(34,85,204,.75); color:#fff; }
+  .badge-preorder{ background:rgba(255,182,72,.85); color:#050E22; }
   .card-actions{ position:absolute; top:9px; right:9px; display:flex; flex-direction:column; gap:7px; }
   .card-actions .icon-btn{
     width:33px; height:33px; background:rgba(5,14,34,.6); border-color:rgba(255,255,255,.16);
@@ -333,7 +324,6 @@
   }
   @keyframes shimmer{ from{ transform:translateX(-100%); } to{ transform:translateX(100%); } }
 
-  /* ---------- modal ---------- */
   .modal-overlay{
     position:fixed; inset:0; z-index:200; background:rgba(2,5,14,.72);
     backdrop-filter:blur(4px); display:flex; align-items:flex-end; justify-content:center;
@@ -371,7 +361,6 @@
   }
   .modal-footer .btn{ flex:1; }
 
-  /* photo grid inside modal */
   .photo-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:10px; }
   .photo-thumb, .photo-add{
     position:relative; aspect-ratio:1/1; border-radius:var(--r-sm); overflow:hidden;
@@ -409,7 +398,6 @@
   .upload-bar-fill{ height:100%; width:0%; background:linear-gradient(90deg,var(--blue),var(--blue-2)); transition:width .2s var(--ease); }
   .upload-progress span{ font-size:12px; color:var(--ink-dim); }
 
-  /* confirm dialog */
   .confirm-card{
     width:100%; max-width:360px; background:#081226; border:1px solid var(--line-2);
     border-radius:var(--r-lg); padding:26px; animation:panelIn .28s var(--ease);
@@ -436,7 +424,7 @@
 <!-- ============ LOGIN ============ -->
 <main id="loginView" class="login-view">
   <div class="login-card">
-    <img src="aartboard 1.png" alt="Swoosh" class="login-logo">
+    <img src="e5d7a926-4a7b-4104-b618-5c0231a7a93e.png" alt="Swoosh" class="login-logo">
     <p class="login-eyebrow">Owner Access</p>
     <form id="loginForm" class="login-form" novalidate>
       <label class="field">
@@ -461,7 +449,7 @@
 <div id="appView" class="hidden">
   <header class="topbar">
     <div class="brand">
-      <img src="aartboard 1.png" alt="" class="brand-mark">
+      <img src="e5d7a926-4a7b-4104-b618-5c0231a7a93e.png" alt="Swoosh Logo" class="brand-mark-logo">
       <div class="brand-text">
         <span class="brand-name">Swoosh</span>
         <span class="brand-tag">Admin</span>
@@ -492,6 +480,10 @@
       <span class="stat-num" id="statNew">0</span>
       <span class="stat-label">New arrivals</span>
     </div>
+    <div class="stat-chip is-accent">
+      <span class="stat-num" id="statPreOrder">0</span>
+      <span class="stat-label">Pre-Order</span>
+    </div>
   </section>
 
   <section class="toolbar">
@@ -505,7 +497,9 @@
       <option value="all">All stock</option>
       <option value="in">In stock</option>
       <option value="out">Out of stock</option>
+      <option value="preorder">Pre-order</option>
     </select>
+    
     <label class="chip-toggle">
       <input type="checkbox" id="newOnlyFilter">
       <span>New arrivals only</span>
@@ -585,7 +579,7 @@
         <label class="toggle">
           <input type="checkbox" id="preOrderInput">
           <span class="toggle-track"><span class="toggle-thumb"></span></span>
-          <span class="toggle-label">Available on Pre-Order</span>
+          <span class="toggle-label">Available On Pre-Order</span>
         </label>
       </div>
 
@@ -634,7 +628,6 @@ import {
   getFirestore, collection, doc, setDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js';
 
-/* ---------------- Firebase ---------------- */
 const firebaseConfig = {
   apiKey: "AIzaSyDWBiKKfOQHAhYW5DGVeC3e58IaI3Ltm9E",
   authDomain: "swoosh-database.firebaseapp.com",
@@ -650,24 +643,21 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 setPersistence(auth, browserLocalPersistence).catch(() => {});
 
-/* ---------------- Admin Verification Access ---------------- */
 const ADMIN_EMAILS = [
   'admin@example.com'
 ];
 
-/* ---------------- Cloudinary ---------------- */
 const CLOUDINARY_CLOUD_NAME = 'clo0efw0';
 const CLOUDINARY_UPLOAD_PRESET = 'swoosh_bd';
 
-/* ---------------- Gender + Type taxonomy ---------------- */
 const GENDER_OPTIONS = [
   ['men', 'Men'], ['women', 'Women'], ['unisex', 'Unisex'],
 ];
 const TYPE_OPTIONS = [
   ['sneakers', 'Sneakers'], ['slides', 'Slides'], ['formal_shirts_pants', 'Formal Shirts & Pants'],
   ['joggers_trousers', 'Joggers & Trousers'], ['dropshoulder_tshirts', 'Dropshoulder T-Shirts'],
-  ['jackets_hoodies', 'Jackets & Hoodies'], ['hoodies_sweater', 'Hoodies & Sweaters'], ['shawl', 'Shawl'],
-  ['watches', 'Watches'], ['heels_sandals', 'Heels & Sandals'], ['tops', 'Tops'], ['gowns', 'Gowns'],
+  ['jackets_hoodies', 'Jackets & Hoodies'], ['hoodies_sweater', 'Hoodies & Sweaters'],
+  ['shawl', 'Shawl'], ['watches', 'Watches'], ['heels_sandals', 'Heels & Sandals'], ['tops', 'Tops'], ['gowns', 'Gowns'],
   ['jewellery', 'Jewellery'], ['bags', 'Bags & Accessories'], ['sunglasses', 'Sunglasses'],
   ['fragrance', 'Fragrance'], ['umbrellas', 'Umbrellas'],
 ];
@@ -682,7 +672,6 @@ function optionsHTML(list, mode, noun){
   return html;
 }
 
-/* ---------------- DOM refs ---------------- */
 const $ = (id) => document.getElementById(id);
 const loginView = $('loginView');
 const appView = $('appView');
@@ -696,7 +685,7 @@ const forgotBtn = $('forgotBtn');
 const userChip = $('userChip');
 const logoutBtn = $('logoutBtn');
 
-const statTotal = $('statTotal'), statInStock =$('statInStock'), statOutStock = $('statOutStock'), statNew =$('statNew');
+const statTotal = $('statTotal'), statInStock = $('statInStock'), statOutStock =$('statOutStock'), statNew = $('statNew'), statPreOrder =$('statPreOrder');
 const searchInput = $('searchInput');
 const genderFilter = $('genderFilter');
 const typeFilter = $('typeFilter');
@@ -739,7 +728,6 @@ typeFilter.innerHTML = optionsHTML(TYPE_OPTIONS, 'all', 'types');
 genderInput.innerHTML = optionsHTML(GENDER_OPTIONS, 'pick', 'gender');
 typeInput.innerHTML = optionsHTML(TYPE_OPTIONS, 'pick', 'type');
 
-/* ---------------- state ---------------- */
 const state = {
   products: [],
   loaded: false,
@@ -753,7 +741,6 @@ const state = {
   unsubscribeProducts: null,
 };
 
-/* ---------------- helpers ---------------- */
 function esc(str){
   return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
@@ -843,7 +830,6 @@ onAuthStateChanged(auth, async (user) => {
       loginError.classList.remove('hidden');
       return;
     }
-
     loginView.classList.add('hidden');
     appView.classList.remove('hidden');
     userChip.textContent = user.email || '';
@@ -920,13 +906,15 @@ function renderAll(){
 function renderStats(){
   const list = state.products;
   const total = list.length;
-  const inStock = list.filter(p => p.inStock !== false).length;
-  const outOfStock = total - inStock;
+  const inStock = list.filter(p => p.inStock !== false && !p.isPreOrder).length;
+  const outOfStock = list.filter(p => p.inStock === false && !p.isPreOrder).length;
   const newArr = list.filter(p => p.isNewArrival === true).length;
+  const preOrder = list.filter(p => p.isPreOrder === true).length;
   statTotal.textContent = total;
   statInStock.textContent = inStock;
   statOutStock.textContent = outOfStock;
   statNew.textContent = newArr;
+  statPreOrder.textContent = preOrder;
 }
 
 function getFilteredList(){
@@ -935,8 +923,9 @@ function getFilteredList(){
   if (search) list = list.filter(p => (`${p.name || ''} ${p.brand || ''}`).toLowerCase().includes(search));
   if (gender !== 'all') list = list.filter(p => p.gender === gender);
   if (type !== 'all') list = list.filter(p => p.type === type);
-  if (stock === 'in') list = list.filter(p => p.inStock !== false);
-  if (stock === 'out') list = list.filter(p => p.inStock === false);
+  if (stock === 'in') list = list.filter(p => p.inStock !== false && !p.isPreOrder);
+  if (stock === 'out') list = list.filter(p => p.inStock === false && !p.isPreOrder);
+  if (stock === 'preorder') list = list.filter(p => p.isPreOrder === true);
   if (newOnly) list = list.filter(p => p.isNewArrival === true);
   return list;
 }
@@ -967,13 +956,14 @@ function renderGrid(animate = false){
 
 function cardHTML(p){
   const cover = (p.photos && p.photos[0]) || PLACEHOLDER_IMG;
-  const outOfStock = p.inStock === false;
+  const isPreOrder = p.isPreOrder === true;
+  const outOfStock = p.inStock === false && !isPreOrder;
   return `
     <div class="card" data-id="${p.id}">
       <div class="card-img">
         <img src="${cover}" alt="${esc(p.name || '')}" loading="lazy">
         <div class="card-badges">
-          ${outOfStock ? '<span class="badge badge-out">Out of stock</span>' : ''}
+          ${isPreOrder ? '<span class="badge badge-preorder">Pre-Order</span>' : (outOfStock ? '<span class="badge badge-out">Out of stock</span>' : '')}
           ${p.isNewArrival ? '<span class="badge badge-new">New</span>' : ''}
         </div>
         <div class="card-actions">
@@ -1172,7 +1162,7 @@ productForm.addEventListener('submit', async (e) => {
           body: formData,
         });
         if (!res.ok){
-          throw new Error('Photo upload failed — check your Cloudinary configuration.');
+          throw new Error('Photo upload failed — check your Cloudinary settings.');
         }
         const uploaded = await res.json();
         uploadedUrls[i] = uploaded.secure_url;
