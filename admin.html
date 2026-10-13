@@ -492,10 +492,6 @@
       <span class="stat-num" id="statNew">0</span>
       <span class="stat-label">New arrivals</span>
     </div>
-    <div class="stat-chip is-accent">
-      <span class="stat-num" id="statPreOrder">0</span>
-      <span class="stat-label">Available On Pre-Order</span>
-    </div>
   </section>
 
   <section class="toolbar">
@@ -509,9 +505,7 @@
       <option value="all">All stock</option>
       <option value="in">In stock</option>
       <option value="out">Out of stock</option>
-      <option value="out">Available On Pre-Order</option>
     </select>
-    
     <label class="chip-toggle">
       <input type="checkbox" id="newOnlyFilter">
       <span>New arrivals only</span>
@@ -588,10 +582,10 @@
           <span class="toggle-track"><span class="toggle-thumb"></span></span>
           <span class="toggle-label">New arrival</span>
         </label>
-       <label class="toggle">
-          <input type="checkbox" id="isPreorderlInput">
+        <label class="toggle">
+          <input type="checkbox" id="preOrderInput">
           <span class="toggle-track"><span class="toggle-thumb"></span></span>
-          <span class="toggle-label">Available On Pre-Order</span>
+          <span class="toggle-label">Available on Pre-Order</span>
         </label>
       </div>
 
@@ -656,23 +650,23 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 setPersistence(auth, browserLocalPersistence).catch(() => {});
 
-/* ---------------- Cloudinary (photo hosting — free plan, no card needed) ----------------
-   Fill these in after creating your free Cloudinary account (see SETUP_GUIDE.md).
-   Cloud name: Dashboard home page, top left.
-   Upload preset: Settings (gear icon) -> Upload -> Upload presets -> Add upload preset -> Signing Mode: Unsigned. */
+/* ---------------- Admin Verification Access ---------------- */
+const ADMIN_EMAILS = [
+  'admin@example.com'
+];
+
+/* ---------------- Cloudinary ---------------- */
 const CLOUDINARY_CLOUD_NAME = 'clo0efw0';
 const CLOUDINARY_UPLOAD_PRESET = 'swoosh_bd';
 
-/* ---------------- Gender + Type taxonomy (matches the new shop.html tabs) ---------------- */
+/* ---------------- Gender + Type taxonomy ---------------- */
 const GENDER_OPTIONS = [
   ['men', 'Men'], ['women', 'Women'], ['unisex', 'Unisex'],
 ];
 const TYPE_OPTIONS = [
   ['sneakers', 'Sneakers'], ['slides', 'Slides'], ['formal_shirts_pants', 'Formal Shirts & Pants'],
   ['joggers_trousers', 'Joggers & Trousers'], ['dropshoulder_tshirts', 'Dropshoulder T-Shirts'],
-  ['jackets_hoodies', 'Jackets & Hoodies'],        // <-- Ekhane add kora hoyeche (Men's)
-  ['hoodies_sweater', 'Hoodies & Sweaters'],       // <-- Ekhane add kora hoyeche (Women's)
-  ['shawl', 'Shawl'],
+  ['jackets_hoodies', 'Jackets & Hoodies'], ['hoodies_sweater', 'Hoodies & Sweaters'], ['shawl', 'Shawl'],
   ['watches', 'Watches'], ['heels_sandals', 'Heels & Sandals'], ['tops', 'Tops'], ['gowns', 'Gowns'],
   ['jewellery', 'Jewellery'], ['bags', 'Bags & Accessories'], ['sunglasses', 'Sunglasses'],
   ['fragrance', 'Fragrance'], ['umbrellas', 'Umbrellas'],
@@ -702,7 +696,7 @@ const forgotBtn = $('forgotBtn');
 const userChip = $('userChip');
 const logoutBtn = $('logoutBtn');
 
-const statTotal = $('statTotal'), statInStock = $('statInStock'), statOutStock = $('statOutStock'), statNew = $('statNew');
+const statTotal = $('statTotal'), statInStock =$('statInStock'), statOutStock = $('statOutStock'), statNew =$('statNew');
 const searchInput = $('searchInput');
 const genderFilter = $('genderFilter');
 const typeFilter = $('typeFilter');
@@ -725,6 +719,7 @@ const typeInput = $('typeInput');
 const brandInput = $('brandInput');
 const inStockInput = $('inStockInput');
 const newArrivalInput = $('newArrivalInput');
+const preOrderInput = $('preOrderInput');
 const descriptionInput = $('descriptionInput');
 const uploadProgress = $('uploadProgress');
 const uploadBarFill = $('uploadBarFill');
@@ -750,7 +745,7 @@ const state = {
   loaded: false,
   filters: { search: '', gender: 'all', type: 'all', stock: 'all', newOnly: false },
   editingId: null,
-  modalPhotos: [],      // [{type:'existing',url}] or [{type:'new',file,previewUrl}]
+  modalPhotos: [],
   originalPhotoUrls: [],
   pendingDeleteId: null,
   saving: false,
@@ -765,9 +760,6 @@ function esc(str){
 function safeName(name){ return String(name).replace(/[^a-zA-Z0-9.\-_]/g, '_'); }
 const PLACEHOLDER_IMG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"%3E%3Crect fill="%230A1830" width="400" height="400"/%3E%3C/svg%3E';
 
-/* Draws the SWOOSH watermark permanently into a photo (bottom-right corner) before it's
-   uploaded, and downsizes very large photos so the site stays fast. Runs once per photo,
-   right before upload — the original file on the admin's device is never touched. */
 async function watermarkImage(file){
   const objectUrl = URL.createObjectURL(file);
   try {
@@ -837,14 +829,21 @@ function authErrorMessage(err){
   if (code.includes('too-many-requests')) return 'Too many attempts. Please wait a moment and try again.';
   if (code.includes('network-request-failed')) return 'Network error — check your internet connection.';
   if (code.includes('invalid-email')) return 'That email address looks invalid.';
-  if (code.includes('unauthorized-domain')) return 'This website address is not authorized in Firebase yet. Add it under Authentication → Settings → Authorized domains.';
+  if (code.includes('unauthorized-domain')) return 'This website address is not authorized in Firebase yet.';
   if (code.includes('missing-password')) return 'Please enter your password.';
   return 'Something went wrong. Please try again.';
 }
 
-/* ---------------- auth ---------------- */
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, async (user) => {
   if (user){
+    const isDefaultSetup = ADMIN_EMAILS.includes('admin@example.com');
+    if (!isDefaultSetup && !ADMIN_EMAILS.includes(user.email)) {
+      await signOut(auth);
+      loginError.textContent = 'Access Denied: Only authorized admins can login.';
+      loginError.classList.remove('hidden');
+      return;
+    }
+
     loginView.classList.add('hidden');
     appView.classList.remove('hidden');
     userChip.textContent = user.email || '';
@@ -896,7 +895,6 @@ forgotBtn.addEventListener('click', async () => {
 
 logoutBtn.addEventListener('click', () => signOut(auth));
 
-/* ---------------- data subscription ---------------- */
 function subscribeToProducts(){
   if (state.unsubscribeProducts) return;
   state.unsubscribeProducts = onSnapshot(
@@ -914,7 +912,6 @@ function subscribeToProducts(){
   );
 }
 
-/* ---------------- render ---------------- */
 function renderAll(){
   renderStats();
   renderGrid(true);
@@ -998,14 +995,12 @@ function cardHTML(p){
     </div>`;
 }
 
-/* ---------------- filters ---------------- */
 searchInput.addEventListener('input', () => { state.filters.search = searchInput.value.toLowerCase().trim(); renderGrid(); });
 genderFilter.addEventListener('change', () => { state.filters.gender = genderFilter.value; renderGrid(); });
 typeFilter.addEventListener('change', () => { state.filters.type = typeFilter.value; renderGrid(); });
 stockFilter.addEventListener('change', () => { state.filters.stock = stockFilter.value; renderGrid(); });
 newOnlyFilter.addEventListener('change', () => { state.filters.newOnly = newOnlyFilter.checked; renderGrid(); });
 
-/* ---------------- grid actions (edit / delete) ---------------- */
 productGrid.addEventListener('click', (e) => {
   const editBtn = e.target.closest('.js-edit');
   if (editBtn){ openEditModal(editBtn.dataset.id); return; }
@@ -1013,7 +1008,6 @@ productGrid.addEventListener('click', (e) => {
   if (delBtn){ openConfirmDelete(delBtn.dataset.id); return; }
 });
 
-/* ---------------- modal: open / close ---------------- */
 function resetModalState(){
   state.modalPhotos.forEach(p => { if (p.type === 'new' && p.previewUrl) URL.revokeObjectURL(p.previewUrl); });
   state.modalPhotos = [];
@@ -1022,6 +1016,7 @@ function resetModalState(){
   productForm.reset();
   inStockInput.checked = true;
   newArrivalInput.checked = false;
+  preOrderInput.checked = false;
   uploadProgress.classList.add('hidden');
   uploadBarFill.style.width = '0%';
   photoInput.value = '';
@@ -1047,6 +1042,7 @@ function openEditModal(id){
   typeInput.value = p.type || '';
   inStockInput.checked = p.inStock !== false;
   newArrivalInput.checked = p.isNewArrival === true;
+  preOrderInput.checked = p.isPreOrder === true;
   descriptionInput.value = p.description || '';
   state.originalPhotoUrls = Array.isArray(p.photos) ? [...p.photos] : [];
   state.modalPhotos = state.originalPhotoUrls.map(url => ({ type: 'existing', url }));
@@ -1065,7 +1061,6 @@ modalCloseBtn.addEventListener('click', closeModal);
 cancelBtn.addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
-/* ---------------- photo grid inside modal ---------------- */
 function renderPhotoGrid(){
   const thumbs = state.modalPhotos.map((p, i) => {
     const src = p.type === 'existing' ? p.url : p.previewUrl;
@@ -1126,7 +1121,6 @@ photoGrid.addEventListener('drop', (e) => {
   if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) addPhotoFiles(e.dataTransfer.files);
 });
 
-/* ---------------- save (create / update) ---------------- */
 productForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (state.saving) return;
@@ -1154,7 +1148,6 @@ productForm.addEventListener('submit', async (e) => {
     const newFiles = state.modalPhotos.filter(p => p.type === 'new');
     const uploadedUrls = new Array(state.modalPhotos.length).fill(null);
 
-    // keep existing photo urls in place first
     state.modalPhotos.forEach((p, i) => { if (p.type === 'existing') uploadedUrls[i] = p.url; });
 
     if (newFiles.length){
@@ -1179,7 +1172,7 @@ productForm.addEventListener('submit', async (e) => {
           body: formData,
         });
         if (!res.ok){
-          throw new Error('Photo upload failed — check your Cloudinary cloud name and upload preset in the code.');
+          throw new Error('Photo upload failed — check your Cloudinary configuration.');
         }
         const uploaded = await res.json();
         uploadedUrls[i] = uploaded.secure_url;
@@ -1196,6 +1189,7 @@ productForm.addEventListener('submit', async (e) => {
       photos: finalPhotos,
       inStock: inStockInput.checked,
       isNewArrival: newArrivalInput.checked,
+      isPreOrder: preOrderInput.checked,
       description: descriptionInput.value.trim(),
       updatedAt: serverTimestamp(),
     };
@@ -1205,9 +1199,6 @@ productForm.addEventListener('submit', async (e) => {
       await setDoc(productRef, data);
     } else {
       await updateDoc(productRef, data);
-      // Note: removed photos are unlinked from this product here, but the files themselves
-      // stay in Cloudinary storage (deleting them needs a signed request, which needs a backend).
-      // Clear them out occasionally from the Cloudinary Media Library if you want to tidy up.
     }
 
     toast(isNew ? 'Product added.' : 'Product updated.', 'success');
@@ -1224,7 +1215,6 @@ productForm.addEventListener('submit', async (e) => {
   }
 });
 
-/* ---------------- delete ---------------- */
 function openConfirmDelete(id){
   const p = state.products.find(x => x.id === id);
   if (!p) return;
@@ -1249,9 +1239,6 @@ confirmDeleteBtn.addEventListener('click', async () => {
   confirmDeleteBtn.disabled = true;
   confirmDeleteBtn.textContent = 'Deleting…';
   try {
-    // Deletes the product from the site. The photo files remain in Cloudinary
-    // (removing them needs a signed request, which needs a backend) — clear them
-    // out from the Cloudinary Media Library occasionally if you want to tidy up.
     await deleteDoc(doc(db, 'products', id));
     toast('Product deleted.', 'success');
     confirmOverlay.classList.add('hidden');
@@ -1266,7 +1253,6 @@ confirmDeleteBtn.addEventListener('click', async () => {
   }
 });
 
-/* ---------------- misc ---------------- */
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   if (!confirmOverlay.classList.contains('hidden')) closeConfirm();
