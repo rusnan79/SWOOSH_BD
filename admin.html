@@ -291,6 +291,7 @@
   }
   .badge-out{ background:rgba(201,42,58,.75); color:#fff; }
   .badge-new{ background:rgba(34,85,204,.75); color:#fff; }
+  .badge-preorder{ background:rgba(255,182,72,.85); color:#050E22; }
   .card-actions{ position:absolute; top:9px; right:9px; display:flex; flex-direction:column; gap:7px; }
   .card-actions .icon-btn{
     width:33px; height:33px; background:rgba(5,14,34,.6); border-color:rgba(255,255,255,.16);
@@ -578,6 +579,11 @@
           <span class="toggle-label">In stock</span>
         </label>
         <label class="toggle">
+          <input type="checkbox" id="preOrderInput">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+          <span class="toggle-label">Available on Pre-Order</span>
+        </label>
+        <label class="toggle">
           <input type="checkbox" id="newArrivalInput">
           <span class="toggle-track"><span class="toggle-thumb"></span></span>
           <span class="toggle-label">New arrival</span>
@@ -586,7 +592,7 @@
 
       <label class="field">
         <span class="field-label">Description <span class="field-optional">(optional)</span></span>
-        <textarea id="descriptionInput" rows="3" placeholder="Material, fit, sizes available…"></textarea>
+        <textarea id="descriptionInput" rows="3" placeholder="Material, fit, sizes available, grade details…"></textarea>
       </label>
 
       <div class="upload-progress hidden" id="uploadProgress">
@@ -645,14 +651,9 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 setPersistence(auth, browserLocalPersistence).catch(() => {});
 
-/* ---------------- Cloudinary (photo hosting — free plan, no card needed) ----------------
-   Fill these in after creating your free Cloudinary account (see SETUP_GUIDE.md).
-   Cloud name: Dashboard home page, top left.
-   Upload preset: Settings (gear icon) -> Upload -> Upload presets -> Add upload preset -> Signing Mode: Unsigned. */
 const CLOUDINARY_CLOUD_NAME = 'clo0efw0';
 const CLOUDINARY_UPLOAD_PRESET = 'swoosh_bd';
 
-/* ---------------- Gender + Type taxonomy (matches the new shop.html tabs) ---------------- */
 const GENDER_OPTIONS = [
   ['men', 'Men'], ['women', 'Women'], ['unisex', 'Unisex'],
 ];
@@ -676,7 +677,6 @@ function optionsHTML(list, mode, noun){
   return html;
 }
 
-/* ---------------- DOM refs ---------------- */
 const $ = (id) => document.getElementById(id);
 const loginView = $('loginView');
 const appView = $('appView');
@@ -712,6 +712,7 @@ const genderInput = $('genderInput');
 const typeInput = $('typeInput');
 const brandInput = $('brandInput');
 const inStockInput = $('inStockInput');
+const preOrderInput = $('preOrderInput');
 const newArrivalInput = $('newArrivalInput');
 const descriptionInput = $('descriptionInput');
 const uploadProgress = $('uploadProgress');
@@ -732,13 +733,12 @@ typeFilter.innerHTML = optionsHTML(TYPE_OPTIONS, 'all', 'types');
 genderInput.innerHTML = optionsHTML(GENDER_OPTIONS, 'pick', 'gender');
 typeInput.innerHTML = optionsHTML(TYPE_OPTIONS, 'pick', 'type');
 
-/* ---------------- state ---------------- */
 const state = {
   products: [],
   loaded: false,
   filters: { search: '', gender: 'all', type: 'all', stock: 'all', newOnly: false },
   editingId: null,
-  modalPhotos: [],      // [{type:'existing',url}] or [{type:'new',file,previewUrl}]
+  modalPhotos: [],
   originalPhotoUrls: [],
   pendingDeleteId: null,
   saving: false,
@@ -746,16 +746,12 @@ const state = {
   unsubscribeProducts: null,
 };
 
-/* ---------------- helpers ---------------- */
 function esc(str){
   return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 function safeName(name){ return String(name).replace(/[^a-zA-Z0-9.\-_]/g, '_'); }
 const PLACEHOLDER_IMG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"%3E%3Crect fill="%230A1830" width="400" height="400"/%3E%3C/svg%3E';
 
-/* Draws the SWOOSH watermark permanently into a photo (bottom-right corner) before it's
-   uploaded, and downsizes very large photos so the site stays fast. Runs once per photo,
-   right before upload — the original file on the admin's device is never touched. */
 async function watermarkImage(file){
   const objectUrl = URL.createObjectURL(file);
   try {
@@ -825,12 +821,11 @@ function authErrorMessage(err){
   if (code.includes('too-many-requests')) return 'Too many attempts. Please wait a moment and try again.';
   if (code.includes('network-request-failed')) return 'Network error — check your internet connection.';
   if (code.includes('invalid-email')) return 'That email address looks invalid.';
-  if (code.includes('unauthorized-domain')) return 'This website address is not authorized in Firebase yet. Add it under Authentication → Settings → Authorized domains.';
+  if (code.includes('unauthorized-domain')) return 'This website address is not authorized in Firebase yet.';
   if (code.includes('missing-password')) return 'Please enter your password.';
   return 'Something went wrong. Please try again.';
 }
 
-/* ---------------- auth ---------------- */
 onAuthStateChanged(auth, (user) => {
   if (user){
     loginView.classList.add('hidden');
@@ -884,7 +879,6 @@ forgotBtn.addEventListener('click', async () => {
 
 logoutBtn.addEventListener('click', () => signOut(auth));
 
-/* ---------------- data subscription ---------------- */
 function subscribeToProducts(){
   if (state.unsubscribeProducts) return;
   state.unsubscribeProducts = onSnapshot(
@@ -902,7 +896,6 @@ function subscribeToProducts(){
   );
 }
 
-/* ---------------- render ---------------- */
 function renderAll(){
   renderStats();
   renderGrid(true);
@@ -965,6 +958,7 @@ function cardHTML(p){
         <img src="${cover}" alt="${esc(p.name || '')}" loading="lazy">
         <div class="card-badges">
           ${outOfStock ? '<span class="badge badge-out">Out of stock</span>' : ''}
+          ${p.isPreOrder ? '<span class="badge badge-preorder">Pre-Order</span>' : ''}
           ${p.isNewArrival ? '<span class="badge badge-new">New</span>' : ''}
         </div>
         <div class="card-actions">
@@ -986,14 +980,12 @@ function cardHTML(p){
     </div>`;
 }
 
-/* ---------------- filters ---------------- */
 searchInput.addEventListener('input', () => { state.filters.search = searchInput.value.toLowerCase().trim(); renderGrid(); });
 genderFilter.addEventListener('change', () => { state.filters.gender = genderFilter.value; renderGrid(); });
 typeFilter.addEventListener('change', () => { state.filters.type = typeFilter.value; renderGrid(); });
 stockFilter.addEventListener('change', () => { state.filters.stock = stockFilter.value; renderGrid(); });
 newOnlyFilter.addEventListener('change', () => { state.filters.newOnly = newOnlyFilter.checked; renderGrid(); });
 
-/* ---------------- grid actions (edit / delete) ---------------- */
 productGrid.addEventListener('click', (e) => {
   const editBtn = e.target.closest('.js-edit');
   if (editBtn){ openEditModal(editBtn.dataset.id); return; }
@@ -1001,7 +993,6 @@ productGrid.addEventListener('click', (e) => {
   if (delBtn){ openConfirmDelete(delBtn.dataset.id); return; }
 });
 
-/* ---------------- modal: open / close ---------------- */
 function resetModalState(){
   state.modalPhotos.forEach(p => { if (p.type === 'new' && p.previewUrl) URL.revokeObjectURL(p.previewUrl); });
   state.modalPhotos = [];
@@ -1009,6 +1000,7 @@ function resetModalState(){
   state.editingId = null;
   productForm.reset();
   inStockInput.checked = true;
+  preOrderInput.checked = false;
   newArrivalInput.checked = false;
   uploadProgress.classList.add('hidden');
   uploadBarFill.style.width = '0%';
@@ -1034,6 +1026,7 @@ function openEditModal(id){
   genderInput.value = p.gender || '';
   typeInput.value = p.type || '';
   inStockInput.checked = p.inStock !== false;
+  preOrderInput.checked = p.isPreOrder === true;
   newArrivalInput.checked = p.isNewArrival === true;
   descriptionInput.value = p.description || '';
   state.originalPhotoUrls = Array.isArray(p.photos) ? [...p.photos] : [];
@@ -1053,7 +1046,6 @@ modalCloseBtn.addEventListener('click', closeModal);
 cancelBtn.addEventListener('click', closeModal);
 modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) closeModal(); });
 
-/* ---------------- photo grid inside modal ---------------- */
 function renderPhotoGrid(){
   const thumbs = state.modalPhotos.map((p, i) => {
     const src = p.type === 'existing' ? p.url : p.previewUrl;
@@ -1114,7 +1106,6 @@ photoGrid.addEventListener('drop', (e) => {
   if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length) addPhotoFiles(e.dataTransfer.files);
 });
 
-/* ---------------- save (create / update) ---------------- */
 productForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   if (state.saving) return;
@@ -1142,7 +1133,6 @@ productForm.addEventListener('submit', async (e) => {
     const newFiles = state.modalPhotos.filter(p => p.type === 'new');
     const uploadedUrls = new Array(state.modalPhotos.length).fill(null);
 
-    // keep existing photo urls in place first
     state.modalPhotos.forEach((p, i) => { if (p.type === 'existing') uploadedUrls[i] = p.url; });
 
     if (newFiles.length){
@@ -1155,7 +1145,7 @@ productForm.addEventListener('submit', async (e) => {
 
         let toUpload = p.file;
         try { toUpload = await watermarkImage(p.file); }
-        catch (err) { console.warn('Watermark skipped for this photo:', err); }
+        catch (err) { console.warn('Watermark skipped:', err); }
 
         const formData = new FormData();
         formData.append('file', toUpload, safeName(p.file.name));
@@ -1167,7 +1157,7 @@ productForm.addEventListener('submit', async (e) => {
           body: formData,
         });
         if (!res.ok){
-          throw new Error('Photo upload failed — check your Cloudinary cloud name and upload preset in the code.');
+          throw new Error('Photo upload failed.');
         }
         const uploaded = await res.json();
         uploadedUrls[i] = uploaded.secure_url;
@@ -1183,6 +1173,7 @@ productForm.addEventListener('submit', async (e) => {
       name, price, brand, gender, type,
       photos: finalPhotos,
       inStock: inStockInput.checked,
+      isPreOrder: preOrderInput.checked,
       isNewArrival: newArrivalInput.checked,
       description: descriptionInput.value.trim(),
       updatedAt: serverTimestamp(),
@@ -1193,9 +1184,6 @@ productForm.addEventListener('submit', async (e) => {
       await setDoc(productRef, data);
     } else {
       await updateDoc(productRef, data);
-      // Note: removed photos are unlinked from this product here, but the files themselves
-      // stay in Cloudinary storage (deleting them needs a signed request, which needs a backend).
-      // Clear them out occasionally from the Cloudinary Media Library if you want to tidy up.
     }
 
     toast(isNew ? 'Product added.' : 'Product updated.', 'success');
@@ -1212,7 +1200,6 @@ productForm.addEventListener('submit', async (e) => {
   }
 });
 
-/* ---------------- delete ---------------- */
 function openConfirmDelete(id){
   const p = state.products.find(x => x.id === id);
   if (!p) return;
@@ -1237,9 +1224,6 @@ confirmDeleteBtn.addEventListener('click', async () => {
   confirmDeleteBtn.disabled = true;
   confirmDeleteBtn.textContent = 'Deleting…';
   try {
-    // Deletes the product from the site. The photo files remain in Cloudinary
-    // (removing them needs a signed request, which needs a backend) — clear them
-    // out from the Cloudinary Media Library occasionally if you want to tidy up.
     await deleteDoc(doc(db, 'products', id));
     toast('Product deleted.', 'success');
     confirmOverlay.classList.add('hidden');
@@ -1254,7 +1238,6 @@ confirmDeleteBtn.addEventListener('click', async () => {
   }
 });
 
-/* ---------------- misc ---------------- */
 document.addEventListener('keydown', (e) => {
   if (e.key !== 'Escape') return;
   if (!confirmOverlay.classList.contains('hidden')) closeConfirm();
