@@ -38,8 +38,9 @@ a{color:inherit;} button{font-family:inherit;}
 
 header{ display:flex; align-items:center; gap:18px; padding:20px 24px; border-bottom:1px solid var(--line);
   position:sticky; top:0; background:var(--bg); z-index:200; }
-.logo-mark{ font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.08em;
+.logo-mark{ display:inline-flex; align-items:center; gap:10px; font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.08em;
   text-decoration:none; color:var(--ink); flex-shrink:0; }
+.logo-img{ display:block; flex:none; width:36px; height:36px; object-fit:contain; }
 .header-nav{ flex:1; min-width:0; display:flex; align-items:center; justify-content:flex-end; gap:22px;
   overflow-x:auto; scrollbar-width:none; -webkit-overflow-scrolling:touch; }
 .header-nav::-webkit-scrollbar{ display:none; }
@@ -82,6 +83,7 @@ header{ display:flex; align-items:center; gap:18px; padding:20px 24px; border-bo
 .menu-head{ padding:22px; border-bottom:1px solid var(--line); display:flex; align-items:center;
   justify-content:space-between; flex-shrink:0; }
 .menu-head .logo-mark{ font-size:1.3rem; }
+.menu-head .logo-img{ width:30px; height:30px; }
 .menu-close{ background:none; border:none; font-size:24px; cursor:pointer; color:var(--ink); line-height:1; padding:4px; }
 .menu-links{ display:flex; flex-direction:column; padding:8px 0; overflow-y:auto; flex:1; }
 .menu-links a{ padding:16px 22px; text-decoration:none; color:var(--ink); font-size:14.5px; font-weight:500;
@@ -231,7 +233,8 @@ main{ max-width:1400px; margin:0 auto; padding:0 20px 100px; }
 #btt:hover{ transform:translateY(-2px); }
 
 footer{ text-align:center; padding:44px 20px 32px; border-top:1px solid var(--line); margin-top:20px; }
-.f-brand{ font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.08em; margin-bottom:6px; }
+.f-brand{ display:flex; align-items:center; justify-content:center; gap:10px; font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:.08em; margin-bottom:6px; }
+.f-brand .logo-img{ width:34px; height:34px; }
 .f-copy{ font-size:10.5px; letter-spacing:.08em; color:var(--ink-45); }
 
 /* ---------- LIGHTBOX ---------- */
@@ -390,10 +393,10 @@ html.dt-lock{ overflow:hidden; }
 </head>
 <body>
 
-<div class="announce">PREMIUM IMPORTED SNEAKERS, APPAREL &amp; FRAGRANCES</div>
+<div class="announce">PREMIUM AUTHENTIC SNEAKERS, APPAREL &amp; FRAGRANCES</div>
 
 <header>
-  <a href="index.html" class="logo-mark">SWOOSH</a>
+  <a href="index.html" class="logo-mark"><img src="logo-black.png" alt="" class="logo-img"><span>SWOOSH</span></a>
   <nav class="header-nav" id="headerNav">
     <a href="index.html">Home</a>
     <a href="shop.html?gender=women" id="navWomen" data-nav="women">Women</a>
@@ -455,7 +458,7 @@ html.dt-lock{ overflow:hidden; }
 </main>
 
 <footer>
-  <div class="f-brand">SWOOSH</div>
+  <div class="f-brand"><img src="logo-black.png" alt="" class="logo-img"><span>SWOOSH</span></div>
   <p class="f-copy">&copy; 2026 All Rights Reserved</p>
 </footer>
 
@@ -498,7 +501,7 @@ html.dt-lock{ overflow:hidden; }
 <div class="menu-overlay" id="menuOverlay"></div>
 <aside class="menu-panel" id="menuPanel">
   <div class="menu-head">
-    <span class="logo-mark">SWOOSH</span>
+    <span class="logo-mark"><img src="logo-black.png" alt="" class="logo-img"><span>SWOOSH</span></span>
     <button class="menu-close" id="menuClose" type="button" aria-label="Close menu">&times;</button>
   </div>
   <nav class="menu-links">
