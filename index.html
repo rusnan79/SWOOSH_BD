@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<title>SWOOSH | Premium Imports</title>
+<title>SWOOSH | Premium Authentic Imports</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant:ital,wght@1,600;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -34,9 +34,11 @@ a{color:inherit;} button{font-family:inherit;}
   text-align:center; padding:20px 24px 44px; }
 
 /* Animation gulo GPU acceleration er jonno optimize kora hoyeche */
-.hero-eyebrow, .hero-brand, .hero-tag, .hero-ctas {
+.hero-logo, .hero-eyebrow, .hero-brand, .hero-tag, .hero-ctas {
   opacity:0; will-change: transform, opacity;
 }
+.hero-logo{ display:block; width:clamp(86px,22vw,124px); height:auto; margin-bottom:10px;
+  filter:drop-shadow(0 8px 12px rgba(0,0,0,.22)); animation:fadeUp .8s var(--eo) .05s forwards; }
 .hero-eyebrow{ font-size:10.5px; letter-spacing:.28em; color:var(--ink-45); text-transform:uppercase;
   margin-bottom:22px; animation:fadeUp .8s var(--eo) forwards; }
 .hero-brand{ font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,13vw,6.2rem);
@@ -93,6 +95,7 @@ footer{ text-align:center; padding:36px 20px; border-top:1px solid var(--line); 
   .announce{ font-size:9px; letter-spacing:.1em; padding:8px 10px; }
   .hero{ padding-top:2vh; }
   .hero-main{ padding:24px 18px 34px; }
+  .hero-logo{ width:clamp(72px,22vw,96px); margin-bottom:8px; }
   .hero-eyebrow{ font-size:9px; letter-spacing:.2em; margin-bottom:14px; }
   .hero-brand{ font-size:clamp(3.4rem,20vw,5rem); }
   .hero-tag{ margin-top:12px; font-size:1.05rem; line-height:1.4; }
@@ -111,11 +114,12 @@ footer{ text-align:center; padding:36px 20px; border-top:1px solid var(--line); 
 </head>
 <body>
 
-<div class="announce">PREMIUM IMPORTED SNEAKERS, APPAREL &amp; FRAGRANCES</div>
+<div class="announce">PREMIUM AUTHENTIC SNEAKERS, APPAREL &amp; FRAGRANCES</div>
 
 <div class="hero">
   <div class="hero-main">
-    <div class="hero-eyebrow">Imported · Premium · Nationwide Delivery</div>
+    <div class="hero-eyebrow">Imported · Authenticated · Nationwide Delivery</div>
+    <img src="logo-black.png" alt="SWOOSH logo" class="hero-logo">
     <h1 class="hero-brand">SWOOSH</h1>
     <p class="hero-tag">Nike, Adidas, Gucci, Louis Vuitton, Dior, Chanel, Asics &amp; Balenciaga — sourced abroad, delivered across Bangladesh and to students overseas.</p>
     <div class="hero-ctas">
@@ -131,7 +135,7 @@ footer{ text-align:center; padding:36px 20px; border-top:1px solid var(--line); 
   <div class="cat-grid" id="catGrid">
     <a class="cat-tile" href="shop.html?gender=men"><img id="tileMen" src="" alt="Men"><span class="cat-tile-label">Men</span></a>
     <a class="cat-tile" href="shop.html?gender=women"><img id="tileWomen" src="" alt="Women"><span class="cat-tile-label">Women</span></a>
-    <a class="cat-tile" href="shop.html?type=sunglasses"><img id="tileSunglasses" src="" alt="sunglassess"><span class="cat-tile-label">Sunglasses</span></a>
+    <a class="cat-tile" href="shop.html?type=sunglasses"><img id="tileSunglasses" src="" alt="Sunglasses"><span class="cat-tile-label">Sunglasses</span></a>
     <a class="cat-tile" href="shop.html?type=umbrellas"><img id="tileUmbrellas" src="" alt="Umbrellas"><span class="cat-tile-label">Umbrellas</span></a>
   </div>
 </section>
@@ -155,10 +159,10 @@ function svgPlaceholder(label, tone){
 
 // Niche apnar nijossho chobir link gulo bosiye din
 const FIXED_IMAGES = {
-  men: 'men.jpg',
-  women: 'women.jpg',
-  sunglasses: 'sunglass.jpg',
-  umbrellas: 'cover_umbrella.jpg'
+  men: 'photos/men.jpg',
+  women: 'photos/women.jpg',
+  sunglasses: 'photos/sunglass.jpg',
+  umbrellas: 'photos/umbrella.jpg'
 };
 
 // Chobi thakle chobi dekhabe, na thakle ager moto color block dekhabe
