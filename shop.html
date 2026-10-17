@@ -173,6 +173,7 @@ main{ max-width:1400px; margin:0 auto; padding:0 20px 100px; }
 .tag{ position:absolute; top:10px; left:10px; z-index:3; background:var(--ink); color:var(--white);
   font-size:9.5px; font-weight:700; letter-spacing:.08em; padding:5px 10px; text-transform:uppercase; }
 .tag.tag-new{ background:var(--white); color:var(--ink); border:1px solid var(--ink); }
+.tag.tag-pre{ background:#0B2A6F; color:var(--white); border:1px solid #0B2A6F; }
 
 .c-count{ position:absolute; top:10px; right:10px; z-index:3; background:rgba(255,255,255,.9);
   color:var(--ink); font-size:9.5px; font-weight:600; padding:4px 8px; border-radius:999px; }
@@ -195,7 +196,7 @@ main{ max-width:1400px; margin:0 auto; padding:0 20px 100px; }
 .c-price{ font-size:13.5px; font-weight:600; margin-top:2px; }
 .out-of-stock{ color:var(--ink-45); text-decoration:line-through; font-weight:400; }
 
-.btn-row{ display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+.btn-row{ display:flex; flex-direction:column; gap:8px; margin-top:auto; padding-top:10px; }
 .order-btn,.bag-add-btn{ display:flex; align-items:center; justify-content:center; gap:8px;
   text-decoration:none; padding:11px 14px; font-size:10.5px; font-weight:600; letter-spacing:.12em;
   text-transform:uppercase; transition:background var(--t1), color var(--t1), transform .1s var(--eo); border:1px solid var(--ink);
@@ -296,6 +297,94 @@ footer{ text-align:center; padding:44px 20px 32px; border-top:1px solid var(--li
 @keyframes toastIn{ from{ opacity:0; transform:translateY(14px) scale(.96); } to{ opacity:1; transform:none; } }
 @keyframes toastOut{ to{ opacity:0; transform:translateY(8px) scale(.97); } }
 
+/* ---------- PRE-ORDER ---------- */
+.pre-note{ display:block; width:fit-content; margin:7px 0 0; padding:3px 8px; border:1px solid #0B2A6F; color:#0B2A6F;
+  font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; line-height:1.4; }
+.cart-pre{ color:#0B2A6F; font-weight:600; }
+
+/* ---------- "DETAILS" LINK ON THE CARD ---------- */
+.dt-link{ align-self:flex-start; display:inline-flex; align-items:center; gap:9px; margin-top:6px; padding:6px 0;
+  background:none; border:none; cursor:pointer; color:var(--ink-70); font-size:10px; font-weight:600;
+  letter-spacing:.18em; text-transform:uppercase; transition:color var(--t1); }
+.dt-link:hover{ color:var(--ink); }
+.dt-link-line{ width:16px; height:1px; background:currentColor; opacity:.45;
+  transition:width var(--t2) var(--eo), opacity var(--t1); }
+.dt-link:hover .dt-link-line{ width:30px; opacity:1; }
+.dt-plus{ position:relative; width:9px; height:9px; flex-shrink:0; }
+.dt-plus::before,.dt-plus::after{ content:''; position:absolute; background:currentColor; }
+.dt-plus::before{ left:0; right:0; top:4px; height:1px; }
+.dt-plus::after{ top:0; bottom:0; left:4px; width:1px; }
+.dt-link:focus-visible{ outline:2px solid var(--ink); outline-offset:3px; }
+
+/* ---------- PRODUCT DETAILS SHEET ---------- */
+html.dt-lock{ overflow:hidden; }
+.dt-overlay{ position:fixed; inset:0; z-index:1800; background:rgba(10,10,10,.45);
+  -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px);
+  opacity:0; visibility:hidden; transition:opacity var(--t2), visibility var(--t2); }
+.dt-overlay.open{ opacity:1; visibility:visible; }
+.dt-sheet{ position:fixed; z-index:1850; left:0; right:0; bottom:0; max-height:92dvh; background:var(--white);
+  border-radius:18px 18px 0 0; display:flex; flex-direction:column; overflow:hidden;
+  box-shadow:0 -24px 70px rgba(0,0,0,.2);
+  transform:translateY(104%); visibility:hidden; transition:transform .45s var(--eo), visibility .45s; }
+.dt-sheet.open{ transform:none; visibility:visible; }
+.dt-close{ position:absolute; top:12px; right:12px; z-index:6; width:38px; height:38px; border-radius:50%;
+  border:1px solid var(--line); background:rgba(255,255,255,.94); color:var(--ink); font-size:22px; line-height:1;
+  cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background var(--t1), transform var(--t1); }
+.dt-close:hover{ background:var(--white); transform:scale(1.06); }
+.dt-body{ flex:1 1 auto; min-height:0; overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
+
+.dt-media{ background:var(--white); }
+.dt-hero{ position:relative; width:100%; aspect-ratio:4/5; max-height:40dvh; overflow:hidden;
+  background:var(--surface); cursor:zoom-in; touch-action:pan-y; }
+.dt-hero img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+.dt-thumbs{ display:flex; gap:8px; padding:10px 22px 0; overflow-x:auto; scrollbar-width:none; }
+.dt-thumbs::-webkit-scrollbar{ display:none; }
+.dt-thumbs:empty{ display:none; }
+.dt-thumb{ flex:none; width:54px; height:54px; padding:0; background:var(--surface); border:1px solid var(--line);
+  cursor:pointer; opacity:.55; transition:opacity var(--t1), border-color var(--t1); }
+.dt-thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+.dt-thumb:hover{ opacity:.9; }
+.dt-thumb.on{ opacity:1; border-color:var(--ink); }
+
+.dt-info{ padding:24px 22px 10px; }
+.dt-brand{ font-size:10.5px; font-weight:600; letter-spacing:.22em; text-transform:uppercase; color:var(--ink-45); }
+.dt-name{ margin-top:7px; font-family:'Cormorant',serif; font-style:italic; font-weight:600;
+  font-size:clamp(1.6rem,5.2vw,2.25rem); line-height:1.12; color:var(--ink); }
+.dt-price{ margin-top:12px; display:flex; align-items:center; flex-wrap:wrap; gap:8px 12px;
+  font-size:17px; font-weight:600; letter-spacing:.01em; }
+.dt-chip{ font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; padding:4px 9px;
+  border:1px solid var(--ink); color:var(--ink); line-height:1.3; }
+.dt-chip.pre{ background:#0B2A6F; border-color:#0B2A6F; color:var(--white); }
+.dt-chip.out{ border-color:var(--ink-45); color:var(--ink-45); }
+.dt-rule{ height:1px; background:var(--ink); opacity:.9; margin:22px 0 0; width:44px; }
+.dt-sec{ margin:16px 0 2px; font-size:10px; font-weight:600; letter-spacing:.24em; text-transform:uppercase; color:var(--ink-45); }
+.dt-specs{ display:flex; flex-direction:column; padding-bottom:6px; }
+.dt-row{ display:grid; grid-template-columns:minmax(92px,34%) 1fr; gap:6px 16px; padding:14px 0; border-bottom:1px solid var(--line); }
+.dt-row-k{ padding-top:3px; font-size:10px; font-weight:600; letter-spacing:.15em; text-transform:uppercase; color:var(--ink-45); }
+.dt-row-v{ font-size:14.5px; line-height:1.55; color:var(--ink); overflow-wrap:anywhere; }
+.dt-note{ display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--line);
+  font-size:14px; line-height:1.65; color:var(--ink-70); overflow-wrap:anywhere; }
+.dt-note::before{ content:''; flex:none; width:4px; height:4px; margin-top:.7em; background:var(--ink); transform:rotate(45deg); }
+
+.dt-actions{ flex:none; display:flex; gap:10px; padding:14px 22px calc(16px + env(safe-area-inset-bottom,0px));
+  border-top:1px solid var(--line); background:var(--white); }
+.dt-actions .bag-add-btn,.dt-actions .order-btn{ flex:1; min-height:48px; padding:12px 10px; }
+.dt-actions .bag-add-btn:disabled{ opacity:.4; cursor:not-allowed; background:var(--white); color:var(--ink); }
+
+@media (min-width:820px){
+  .dt-sheet{ left:50%; right:auto; top:50%; bottom:auto; width:min(940px,92vw); height:min(660px,88dvh); max-height:none;
+    border-radius:4px; display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); grid-template-rows:minmax(0,1fr) auto;
+    transform:translate(-50%,-46%); opacity:0; box-shadow:0 40px 110px rgba(0,0,0,.3);
+    transition:transform .45s var(--eo), opacity .3s var(--eo), visibility .45s; }
+  .dt-sheet.open{ transform:translate(-50%,-50%); opacity:1; }
+  .dt-body{ display:contents; }
+  .dt-media{ grid-column:1; grid-row:1 / span 2; display:flex; flex-direction:column; min-height:0; background:var(--surface); }
+  .dt-hero{ flex:1 1 auto; min-height:0; aspect-ratio:auto; max-height:none; }
+  .dt-thumbs{ padding:12px 14px; background:var(--white); border-top:1px solid var(--line); }
+  .dt-info{ grid-column:2; grid-row:1; min-height:0; overflow-y:auto; overscroll-behavior:contain; padding:46px 38px 10px; }
+  .dt-actions{ grid-column:2; grid-row:2; padding:16px 38px 26px; }
+}
+
 [hidden]{ display:none !important; }
 </style>
 </head>
@@ -384,6 +473,26 @@ footer{ text-align:center; padding:44px 20px 32px; border-top:1px solid var(--li
   <div class="lb-counter" id="lbCounter"></div>
 </div>
 
+<div class="dt-overlay" id="dtOverlay"></div>
+<aside class="dt-sheet" id="dtSheet" role="dialog" aria-modal="true" aria-labelledby="dtName" aria-hidden="true">
+  <button class="dt-close" id="dtClose" type="button" aria-label="Close details">&times;</button>
+  <div class="dt-body">
+    <div class="dt-media">
+      <div class="dt-hero" id="dtHero"><img id="dtHeroImg" src="" alt=""></div>
+      <div class="dt-thumbs" id="dtThumbs"></div>
+    </div>
+    <div class="dt-info">
+      <div class="dt-brand" id="dtBrand" hidden></div>
+      <h3 class="dt-name" id="dtName"></h3>
+      <div class="dt-price" id="dtPrice"></div>
+      <div class="dt-rule"></div>
+      <div class="dt-sec">Product Details</div>
+      <div class="dt-specs" id="dtSpecs"></div>
+    </div>
+  </div>
+  <div class="dt-actions" id="dtActions"></div>
+</aside>
+
 <div class="toast-host" id="toastHost" aria-live="polite"></div>
 
 <div class="menu-overlay" id="menuOverlay"></div>
@@ -421,6 +530,7 @@ footer{ text-align:center; padding:44px 20px 32px; border-top:1px solid var(--li
 'use strict';
 
 const WA = '8801575619905';
+const WA_SVG = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
 const PLACEHOLDER_IMG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500"%3E%3Crect fill="%23F1F1EE" width="400" height="500"/%3E%3C/svg%3E';
 
 function esc(str){ return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -593,7 +703,7 @@ function representativePhoto(type) {
   }
 
   // Fixed chobi set kora na thakle, automatic fetch korbe
-  const match = state.products.find(p => p.type === type && inGender(p) && Array.isArray(p.photos) && p.photos.length && p.inStock !== false);
+  const match = state.products.find(p => p.type === type && inGender(p) && Array.isArray(p.photos) && p.photos.length && (p.inStock !== false || p.isPreorder === true));
   return match ? match.photos[0] : null;
 }
 
@@ -652,7 +762,7 @@ function representativePhotoForGender(genderValue) {
   }
 
   // Fixed chobi set kora na thakle, automatic fetch korbe
-  const match = state.products.find(p => p.type === state.type && (p.gender === genderValue || (genderValue !== 'unisex' && p.gender === 'unisex')) && Array.isArray(p.photos) && p.photos.length && p.inStock !== false);
+  const match = state.products.find(p => p.type === state.type && (p.gender === genderValue || (genderValue !== 'unisex' && p.gender === 'unisex')) && Array.isArray(p.photos) && p.photos.length && (p.inStock !== false || p.isPreorder === true));
   return match ? match.photos[0] : null;
 }
 catGrid.addEventListener('click', (e) => {
@@ -746,27 +856,36 @@ function renderAll(){
   renderProducts();
 }
 
+function orderLink(p, isPre){
+  const text = isPre
+    ? `Hi! I'd like to pre-order "${p.name}" (${p.price}). Can you help?`
+    : `Hi! I'm interested in "${p.name}" (${p.price}). Can you help?`;
+  return `https://wa.me/${WA}?text=${encodeURIComponent(text)}`;
+}
+
 function cardHtml(p){
   const photos = (Array.isArray(p.photos) && p.photos.length) ? p.photos : [PLACEHOLDER_IMG];
   const multi = photos.length > 1;
-  const w = encodeURIComponent(`Hi! I'm interested in "${p.name}" (${p.price}). Can you help?`);
-  const outOfStock = p.inStock === false;
+  const isPre = p.isPreorder === true;
+  const outOfStock = p.inStock === false && !isPre;
+  const hasDetails = String(p.description || '').trim() !== '';
   return `
   <div class="card">
     <div class="c-img" data-idx="0" data-photos="${esc(JSON.stringify(photos))}">
       ${photos.map((url,i) => `<img src="${esc(url)}" class="main-img${i===0?' on':''}" alt="${esc(p.name)}" loading="lazy" decoding="async">`).join('')}
-      ${p.isNewArrival ? '<span class="tag tag-new">New</span>' : '<span class="tag">Premium</span>'}
+      ${isPre ? '<span class="tag tag-pre">Pre-Order</span>' : p.isNewArrival ? '<span class="tag tag-new">New</span>' : '<span class="tag">Premium</span>'}
       ${multi ? `<div class="c-count">1/${photos.length}</div><button type="button" class="c-nav c-prev" aria-label="Previous photo">‹</button><button type="button" class="c-nav c-next" aria-label="Next photo">›</button><div class="c-dots">${photos.map((_,i)=>`<span class="c-dot${i===0?' on':''}" data-i="${i}"></span>`).join('')}</div>` : ''}
     </div>
     <div class="c-body">
       ${p.brand ? `<div class="c-brand">${esc(p.brand)}</div>` : ''}
       <div class="c-name">${esc(p.name)}</div>
-      <div class="c-price">${outOfStock ? `<span class="out-of-stock">${esc(p.price)}</span> · Sold out` : esc(p.price)}</div>
+      <div class="c-price">${outOfStock ? `<span class="out-of-stock">${esc(p.price)}</span> · Sold out` : isPre ? `${esc(p.price)}<span class="pre-note">Available on Pre-Order</span>` : esc(p.price)}</div>
+      ${hasDetails ? `<button type="button" class="dt-link" data-details-id="${esc(p.id)}" aria-haspopup="dialog" aria-label="View details of ${esc(p.name)}"><span>Details</span><span class="dt-link-line"></span><span class="dt-plus"></span></button>` : ''}
       <div class="btn-row">
         <button type="button" class="bag-add-btn" data-add-id="${esc(p.id)}" ${outOfStock ? 'disabled' : ''}>+ Add to Bag</button>
-        <a href="https://wa.me/${WA}?text=${w}" target="_blank" rel="noopener" class="order-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Order Now
+        <a href="${orderLink(p, isPre)}" target="_blank" rel="noopener" class="order-btn">
+          ${WA_SVG}
+          ${isPre ? 'Pre-Order Now' : 'Order Now'}
         </a>
       </div>
     </div>
@@ -898,6 +1017,132 @@ lightbox.addEventListener('touchend', e => {
   lbTouchX = null;
 }, { passive: true });
 
+/* ---------------- Product details sheet (opens from the "Details" link on a card) ---------------- */
+const dtOverlay = document.getElementById('dtOverlay');
+const dtSheet = document.getElementById('dtSheet');
+const dtClose = document.getElementById('dtClose');
+const dtHero = document.getElementById('dtHero');
+const dtHeroImg = document.getElementById('dtHeroImg');
+const dtThumbs = document.getElementById('dtThumbs');
+const dtBrand = document.getElementById('dtBrand');
+const dtName = document.getElementById('dtName');
+const dtPrice = document.getElementById('dtPrice');
+const dtSpecs = document.getElementById('dtSpecs');
+const dtActions = document.getElementById('dtActions');
+let dtProduct = null, dtPhotos = [], dtIndex = 0, dtTrigger = null, dtSwiped = false, dtTouchX = null;
+
+/* One detail per line. "Label: value" becomes a spec row, anything else is shown as a plain note. */
+function parseDetails(text){
+  const items = [];
+  String(text || '').split(/\r?\n/).forEach(raw => {
+    const line = raw.trim();
+    if (!line) return;
+    const m = line.match(/^[-•*–—]?\s*([^:：]{1,32}?)\s*[:：](?!\d)\s*(.+)$/);
+    if (m && !m[2].startsWith('//')) items.push({ k: m[1].trim(), v: m[2].trim() });
+    else items.push({ note: line.replace(/^[-•*–—]\s*/, '') });
+  });
+  return items;
+}
+function detailsHtml(text){
+  return parseDetails(text).map(it => it.note !== undefined
+    ? `<div class="dt-note"><span>${esc(it.note)}</span></div>`
+    : `<div class="dt-row"><div class="dt-row-k">${esc(it.k)}</div><div class="dt-row-v">${esc(it.v)}</div></div>`
+  ).join('');
+}
+
+function setDetailsPhoto(i){
+  dtIndex = ((i % dtPhotos.length) + dtPhotos.length) % dtPhotos.length;
+  dtHeroImg.src = dtPhotos[dtIndex];
+  dtThumbs.querySelectorAll('.dt-thumb').forEach((t, n) => t.classList.toggle('on', n === dtIndex));
+}
+
+function openDetails(p, trigger){
+  if (dtSheet.classList.contains('open')) return;
+  dtProduct = p;
+  dtTrigger = trigger || null;
+  dtPhotos = (Array.isArray(p.photos) && p.photos.length) ? p.photos : [PLACEHOLDER_IMG];
+  const isPre = p.isPreorder === true;
+  const outOfStock = p.inStock === false && !isPre;
+
+  dtBrand.textContent = p.brand || '';
+  dtBrand.hidden = !p.brand;
+  dtName.textContent = p.name || '';
+  dtPrice.innerHTML = `<span${outOfStock ? ' class="out-of-stock"' : ''}>${esc(p.price)}</span>`
+    + (isPre ? '<span class="dt-chip pre">Available on Pre-Order</span>'
+      : outOfStock ? '<span class="dt-chip out">Sold out</span>'
+      : p.isNewArrival ? '<span class="dt-chip">New</span>' : '');
+  dtSpecs.innerHTML = detailsHtml(p.description);
+  dtThumbs.innerHTML = dtPhotos.length > 1
+    ? dtPhotos.map((u, i) => `<button type="button" class="dt-thumb" data-i="${i}" aria-label="Photo ${i + 1}"><img src="${esc(u)}" alt="" loading="lazy"></button>`).join('')
+    : '';
+  dtActions.innerHTML = `
+    <button type="button" class="bag-add-btn" data-dt-add ${outOfStock ? 'disabled' : ''}>+ Add to Bag</button>
+    <a href="${orderLink(p, isPre)}" target="_blank" rel="noopener" class="order-btn">${WA_SVG}${isPre ? 'Pre-Order Now' : 'Order Now'}</a>`;
+  setDetailsPhoto(0);
+  dtBody().scrollTop = 0;
+  dtSheet.querySelector('.dt-info').scrollTop = 0;
+
+  dtOverlay.classList.add('open');
+  dtSheet.classList.add('open');
+  dtSheet.setAttribute('aria-hidden', 'false');
+  document.documentElement.classList.add('dt-lock');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => dtClose.focus({ preventScroll: true }), 60);
+}
+function dtBody(){ return dtSheet.querySelector('.dt-body'); }
+
+function closeDetails(){
+  if (!dtSheet.classList.contains('open')) return;
+  dtOverlay.classList.remove('open');
+  dtSheet.classList.remove('open');
+  dtSheet.setAttribute('aria-hidden', 'true');
+  document.documentElement.classList.remove('dt-lock');
+  document.body.style.overflow = '';
+  if (dtTrigger && dtTrigger.isConnected) dtTrigger.focus({ preventScroll: true });
+  dtProduct = null;
+}
+
+grid.addEventListener('click', (e) => {
+  const link = e.target.closest('[data-details-id]');
+  if (!link) return;
+  const product = state.products.find(p => p.id === link.dataset.detailsId);
+  if (product) openDetails(product, link);
+});
+dtClose.addEventListener('click', closeDetails);
+dtOverlay.addEventListener('click', closeDetails);
+
+dtThumbs.addEventListener('click', (e) => {
+  const t = e.target.closest('.dt-thumb');
+  if (t) setDetailsPhoto(Number(t.dataset.i));
+});
+dtHero.addEventListener('click', () => {
+  if (dtSwiped){ dtSwiped = false; return; }
+  if (dtProduct && Array.isArray(dtProduct.photos) && dtProduct.photos.length) openLightbox(dtPhotos, dtIndex);
+});
+dtHero.addEventListener('touchstart', (e) => { dtTouchX = e.touches[0].clientX; }, { passive: true });
+dtHero.addEventListener('touchend', (e) => {
+  if (dtTouchX === null) return;
+  const dx = e.changedTouches[0].clientX - dtTouchX;
+  dtTouchX = null;
+  if (Math.abs(dx) > 40 && dtPhotos.length > 1){ setDetailsPhoto(dtIndex + (dx < 0 ? 1 : -1)); dtSwiped = true; }
+}, { passive: true });
+
+dtActions.addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-dt-add]');
+  if (!btn || btn.disabled || !dtProduct) return;
+  const product = dtProduct;
+  addToBag(product);
+  closeDetails();
+  showAddedToast(product);
+});
+
+/* capture phase: if the photo viewer is open, Esc closes that first and leaves this sheet alone */
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape' || !dtSheet.classList.contains('open')) return;
+  if (lightbox.classList.contains('open')) return;
+  closeDetails();
+}, true);
+
 /* ---------------- Mobile menu drawer (shows every category at once — no swiping needed) ---------------- */
 function openMenu(){
   closeCart();
@@ -948,7 +1193,7 @@ function saveCart(){
 function addToBag(product){
   const existing = state.cart.find(i => i.id === product.id);
   if (existing) existing.qty += 1;
-  else state.cart.push({ id: product.id, name: product.name, brand: product.brand || '', price: product.price, photo: product.photos?.[0] || '', qty: 1 });
+  else state.cart.push({ id: product.id, name: product.name, brand: product.brand || '', price: product.price, photo: product.photos?.[0] || '', qty: 1, pre: product.isPreorder === true });
   saveCart();
   renderCartBadge();
   renderCartPanel();
@@ -990,7 +1235,7 @@ function renderCartPanel(){
         <img class="cart-line-img" src="${esc(i.photo || PLACEHOLDER_IMG)}" alt="">
         <div class="cart-line-info">
           <div class="cart-line-name">${esc(i.name)}</div>
-          <div class="cart-line-meta">${i.brand ? esc(i.brand) + ' · ' : ''}${esc(i.price)}${i.qty > 1 ? ' × ' + i.qty : ''}</div>
+          <div class="cart-line-meta">${i.brand ? esc(i.brand) + ' · ' : ''}${esc(i.price)}${i.qty > 1 ? ' × ' + i.qty : ''}${i.pre ? ' · <span class="cart-pre">Pre-Order</span>' : ''}</div>
         </div>
         <button class="cart-line-remove" data-remove-id="${esc(i.id)}" type="button" aria-label="Remove">&times;</button>
       </div>`).join('');
@@ -1022,7 +1267,7 @@ document.getElementById('cartCheckout').addEventListener('click', () => {
   if (!state.cart.length) return;
   let msg = "Hi! I'd like to order:\n\n";
   state.cart.forEach((item, i) => {
-    msg += `${i+1}. ${item.name}${item.brand ? ' (' + item.brand + ')' : ''} — ${item.price}${item.qty > 1 ? ' x' + item.qty : ''}\n`;
+    msg += `${i+1}. ${item.name}${item.brand ? ' (' + item.brand + ')' : ''} — ${item.price}${item.qty > 1 ? ' x' + item.qty : ''}${item.pre ? ' [PRE-ORDER]' : ''}\n`;
   });
   const total = cartTotal();
   if (total !== null) msg += `\nEstimated total: ৳ ${total.toLocaleString()}`;
