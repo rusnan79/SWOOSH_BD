@@ -7,6 +7,25 @@
 <title>SWOOSH — Shop</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- Speed: Firebase + Cloudinary-r sathe connection age thekei shuru hoye jabe -->
+<link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://res.cloudinary.com" crossorigin>
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js">
+<link rel="modulepreload" href="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js">
+<link rel="preload" as="image" href="logo-black.png">
+<script>
+/* Speed: hero chobi page khulei download shuru hobe (JS/Firebase-er jonno wait korbe na) */
+(function(){
+  try {
+    var p = new URLSearchParams(location.search), t = p.get('type'), g = p.get('gender'), img = '';
+    if (t === 'sunglasses') img = 'sunglass.jpg';
+    else if (t === 'umbrellas') img = 'umbrella.jpg';
+    else if (g === 'men') img = 'men.jpg';
+    else if (g === 'women') img = 'women.jpg';
+    if (img){ var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = img; document.head.appendChild(l); }
+  } catch (e) {}
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant:ital,wght@1,600;1,700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -107,11 +126,17 @@ header{ display:flex; align-items:center; gap:18px; padding:20px 24px; border-bo
   margin-top:14px; opacity:.9; text-shadow:0 1px 12px rgba(0,0,0,.3); }
 
 /* ---------- SEARCH ---------- */
-.search-wrap{ padding:16px 20px 0; max-width:1400px; margin:0 auto; }
+.search-wrap{ padding:16px 20px 0; max-width:1400px; margin:0 auto; scroll-margin-top:90px; }
 .search-box{ position:relative; }
-.search-box svg{ position:absolute; left:16px; top:50%; transform:translateY(-50%);
-  width:15px; height:15px; opacity:.4; pointer-events:none; }
-#searchInput{ width:100%; padding:14px 16px 14px 42px; border:1px solid var(--line);
+.search-btn{ position:absolute; left:0; top:0; bottom:0; width:44px; display:flex; align-items:center; justify-content:center;
+  background:none; border:none; cursor:pointer; color:var(--ink); }
+.search-btn svg{ width:15px; height:15px; opacity:.55; transition:opacity var(--t1); }
+.search-btn:hover svg{ opacity:1; }
+.search-clear{ position:absolute; right:6px; top:50%; transform:translateY(-50%); width:34px; height:34px;
+  border:none; background:none; border-radius:50%; font-size:22px; line-height:1; color:var(--ink-45); cursor:pointer;
+  transition:background var(--t1), color var(--t1); }
+.search-clear:hover{ color:var(--ink); background:var(--surface); }
+#searchInput{ width:100%; padding:14px 42px 14px 42px; border:1px solid var(--line);
   border-radius:var(--r); background:var(--white); font-size:16px; letter-spacing:.03em;
   color:var(--ink); outline:none; transition:border-color var(--t1); }
 #searchInput::placeholder{ color:var(--ink-45); text-transform:uppercase; letter-spacing:.06em; }
@@ -138,9 +163,9 @@ header{ display:flex; align-items:center; gap:18px; padding:20px 24px; border-bo
 /* ---------- MAIN / SECTION HEAD ---------- */
 main{ max-width:1400px; margin:0 auto; padding:0 20px 100px; }
 .sec-head{ display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
-  gap:10px 16px; margin:34px 0 22px; }
+  gap:10px 16px; margin:34px 0 22px; scroll-margin-top:96px; }
 .sec-title{ font-family:'Cormorant',serif; font-style:italic; font-weight:600;
-  font-size:clamp(1.8rem,5vw,2.8rem); }
+  font-size:clamp(1.8rem,5vw,2.8rem); overflow-wrap:anywhere; }
 .sec-controls{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; }
 .sec-count{ font-size:11px; letter-spacing:.1em; color:var(--ink-45); white-space:nowrap; }
 .sort-wrap{ position:relative; }
@@ -424,12 +449,15 @@ html.dt-lock{ overflow:hidden; }
 
 <div class="search-wrap">
   <div class="search-box">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-    <input type="text" id="searchInput" placeholder="Search brands &amp; items (e.g. Dior, Nike)">
+    <button type="button" class="search-btn" id="searchBtn" aria-label="Search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+    </button>
+    <input type="text" id="searchInput" placeholder="Search brands &amp; items (e.g. Dior, Nike)" aria-label="Search products" enterkeyhint="search" inputmode="search" autocomplete="off" autocapitalize="off" spellcheck="false">
+    <button type="button" class="search-clear" id="searchClear" aria-label="Clear search" hidden>&times;</button>
   </div>
 </div>
 
-<section class="cat-section">
+<section class="cat-section" id="catSection">
   <div class="cat-section-head">
     <h2 class="cat-eyebrow">Shop the Collection</h2>
   </div>
@@ -538,6 +566,15 @@ const PLACEHOLDER_IMG = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000
 
 function esc(str){ return String(str ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
+/* Speed: Cloudinary chobi gulo ke chhoto + modern format-e (WebP/AVIF) load korar jonno.
+   Original file Cloudinary-te jemon chhilo temon-i thake, shudhu website-e chhoto version ashe. */
+function optImg(url, w){
+  if (typeof url !== 'string') return url;
+  if (url.indexOf('res.cloudinary.com') === -1 || url.indexOf('/upload/') === -1) return url;
+  if (url.indexOf('/upload/f_auto') !== -1) return url;
+  return url.replace('/upload/', '/upload/f_auto,q_auto,c_limit,w_' + w + '/');
+}
+
 function svgPlaceholder(label, tone){
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><rect fill="${tone}" width="400" height="400"/><rect x="14" y="14" width="372" height="372" fill="none" stroke="rgba(10,10,10,.2)" stroke-width="2"/><text x="200" y="208" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="26" fill="rgba(10,10,10,.62)" text-anchor="middle">${label}</text></svg>`;
   return 'data:image/svg+xml,' + encodeURIComponent(svg);
@@ -597,7 +634,10 @@ const secTitle = document.getElementById('secTitle');
 const secCount = document.getElementById('secCount');
 const demoNote = document.getElementById('demoNote');
 const catGrid = document.getElementById('catGrid');
+const catSection = document.getElementById('catSection');
 const searchInput = document.getElementById('searchInput');
+const searchBtn = document.getElementById('searchBtn');
+const searchClear = document.getElementById('searchClear');
 const sortSelect = document.getElementById('sortSelect');
 const bagBtn = document.getElementById('bagBtn');
 const bagBadge = document.getElementById('bagBadge');
@@ -618,25 +658,50 @@ const firebaseConfig = {
   measurementId: "G-6FV9QQF6LR"
 };
 
+/* Speed: shesh bar dekha product list ta browser-e rakha thake. Porer bar site khulei product gulo
+   shathe shathe dekha jay, Firebase er jonno wait korte hoy na. Firebase theke notun data ashle auto update hoy. */
+const CACHE_KEY = 'swoosh_products_v1';
+let lastSig = '';
+function stripForCache(list){ return list.map(({ createdAt, updatedAt, ...rest }) => rest); }
+
 async function boot(){
   try {
-    const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js');
-    const { getFirestore, collection, onSnapshot } = await import('https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js');
+    const [{ initializeApp }, { getFirestore, collection, onSnapshot }] = await Promise.all([
+      import('https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js'),
+      import('https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js'),
+    ]);
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     onSnapshot(collection(db, 'products'), (snap) => {
       const live = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      if (live.length){ state.products = live; state.isDemo = false; }
-      else { state.products = DEMO_PRODUCTS; state.isDemo = true; }
+      if (live.length){
+        const sig = JSON.stringify(stripForCache(live));
+        if (sig === lastSig && !state.isDemo) return; // screen-e ja ache tai-i, notun kichu nai
+        lastSig = sig;
+        state.products = live; state.isDemo = false;
+        try { localStorage.setItem(CACHE_KEY, sig); } catch (err) { /* ignore */ }
+      } else {
+        lastSig = '';
+        try { localStorage.removeItem(CACHE_KEY); } catch (err) { /* ignore */ }
+        state.products = DEMO_PRODUCTS; state.isDemo = true;
+      }
       renderAll();
     }, () => useDemo());
   } catch (err) { useDemo(); }
 }
-function useDemo(){ state.products = DEMO_PRODUCTS; state.isDemo = true; renderAll(); }
-boot();
+function useDemo(){
+  if (state.products.length && !state.isDemo) return; // cache-er real product thakle demo dekhabe na
+  state.products = DEMO_PRODUCTS; state.isDemo = true; renderAll();
+}
 
 /* ---------------- Filtering + sorting ---------------- */
-function inGender(p){ return !state.gender || p.gender === state.gender || p.gender === 'unisex'; }
+function isSearching(){ return state.search.trim() !== ''; }
+
+function inGender(p){
+  // Sunglasses / Umbrellas page-e search korle Men/Women/Unisex shob theke khuje dey
+  if (state.mode === 'section' && isSearching()) return true;
+  return !state.gender || p.gender === state.gender || p.gender === 'unisex';
+}
 
 function parsePrice(str){
   const m = String(str).replace(/,/g, '').match(/[\d.]+/);
@@ -656,11 +721,16 @@ function sortList(list){
 }
 
 function getFiltered(){
-  const s = state.search.trim().toLowerCase();
+  const tokens = state.search.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  const searching = tokens.length > 0;
   const list = state.products.filter(p => {
     if (!inGender(p)) return false;
-    if (state.type && p.type !== state.type) return false;
-    if (s && !(`${p.name} ${p.brand || ''}`.toLowerCase().includes(s))) return false;
+    // Search korle category tile-er filter bad jay (jate shob category theke khuje pay)
+    if (state.type && p.type !== state.type && (!searching || state.mode === 'section')) return false;
+    if (searching){
+      const hay = `${p.name || ''} ${p.brand || ''} ${TYPE_LABEL[p.type] || ''}`.toLowerCase();
+      if (!tokens.every(t => hay.includes(t))) return false;
+    }
     return true;
   });
   return sortList(list);
@@ -719,12 +789,12 @@ function renderCatGrid(){
       { value:'women', label:"Women's", tone:'#EFECE6' },
       { value:'unisex', label:'Unisex', tone:'#EAE7E1' },
     ];
-    catGrid.innerHTML = genderTiles.map(t => {
+    catGrid.innerHTML = genderTiles.map((t, i) => {
       const photo = t.value ? (representativePhotoForGender(t.value) || svgPlaceholder(t.label, t.tone)) : svgPlaceholder('View All', t.tone);
       const active = state.gender === t.value;
       return `
       <button class="cat-tile${active ? ' active' : ''}" type="button" data-gender-tile="${esc(t.value)}">
-        <div class="cat-tile-img"><img src="${esc(photo)}" alt="${esc(t.label)}" loading="lazy" decoding="async"></div>
+        <div class="cat-tile-img"><img src="${esc(optImg(photo, 500))}" alt="${esc(t.label)}"${i < 6 ? '' : ' loading="lazy"'} decoding="async"></div>
         <span class="cat-tile-label">${esc(t.label)}</span>
       </button>`;
     }).join('');
@@ -733,12 +803,12 @@ function renderCatGrid(){
   const typeKeys = state.gender === 'men' ? MEN_TYPES : state.gender === 'women' ? WOMEN_TYPES : TYPE_OPTIONS.map(t => t[0]);
   const typeMap = Object.fromEntries(TYPE_OPTIONS.map(t => [t[0], t]));
   const tiles = [{ value:'', label:'All', tone:'#F1F1EE' }, ...typeKeys.map(k => ({ value:k, label:typeMap[k][1], tone:typeMap[k][2] }))];
-  catGrid.innerHTML = tiles.map(t => {
+  catGrid.innerHTML = tiles.map((t, i) => {
     const photo = t.value ? (representativePhoto(t.value) || svgPlaceholder(t.label, t.tone)) : svgPlaceholder('View All', t.tone);
     const active = state.type === t.value;
     return `
     <button class="cat-tile${active ? ' active' : ''}" type="button" data-type="${esc(t.value)}">
-      <div class="cat-tile-img"><img src="${esc(photo)}" alt="${esc(t.label)}" loading="lazy" decoding="async"></div>
+      <div class="cat-tile-img"><img src="${esc(optImg(photo, 500))}" alt="${esc(t.label)}"${i < 6 ? '' : ' loading="lazy"'} decoding="async"></div>
       <span class="cat-tile-label">${esc(t.label)}</span>
     </button>`;
   }).join('');
@@ -777,10 +847,54 @@ catGrid.addEventListener('click', (e) => {
   document.querySelector('main').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
+/* ---------------- Search ---------------- */
+function sectionTitle(){
+  if (state.mode === 'section'){
+    return state.gender ? (state.gender === 'men' ? "Men's" : state.gender === 'women' ? "Women's" : 'Unisex') + ' ' + TYPE_LABEL[state.type] : TYPE_LABEL[state.type];
+  }
+  return state.type ? TYPE_LABEL[state.type] : (state.gender ? (state.gender === 'men' ? "Men's Collection" : "Women's Collection") : 'Editorial');
+}
+
+/* Search korle category picture grid lukiye jay, jate result ta search box-er thik niche-i dekha jay */
+function updateSearchUI(){
+  const q = state.search.trim();
+  catSection.hidden = q !== '';
+  secTitle.textContent = q ? `Results for “${q}”` : sectionTitle();
+}
+
+function applySearch(scrollToResults){
+  state.search = searchInput.value;
+  searchClear.hidden = searchInput.value === '';
+  updateSearchUI();
+  renderProducts();
+  if (scrollToResults){
+    searchInput.blur();
+    requestAnimationFrame(() => document.querySelector('.sec-head').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  }
+}
+
 let searchDebounceTimer = null;
 searchInput.addEventListener('input', () => {
   clearTimeout(searchDebounceTimer);
-  searchDebounceTimer = setTimeout(() => { state.search = searchInput.value; renderProducts(); }, 180);
+  searchClear.hidden = searchInput.value === '';
+  searchDebounceTimer = setTimeout(() => applySearch(false), 150);
+});
+searchInput.addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  clearTimeout(searchDebounceTimer);
+  applySearch(true);
+});
+searchBtn.addEventListener('click', () => {
+  clearTimeout(searchDebounceTimer);
+  if (searchInput.value.trim()) applySearch(true);
+  else searchInput.focus();
+});
+searchClear.addEventListener('click', () => {
+  clearTimeout(searchDebounceTimer);
+  searchInput.value = '';
+  applySearch(false);
+  searchInput.focus();
 });
 
 sortSelect.addEventListener('change', () => { state.sort = sortSelect.value; renderProducts(); });
@@ -834,12 +948,8 @@ function renderShell(){
     heroSubtitle.textContent = state.gender ? 'The Premium Curated Edit' : 'Imported · Authenticated · Nationwide Delivery';
   }
   setHeroImage();
-  if (state.mode === 'section'){
-    secTitle.textContent = state.gender ? (state.gender === 'men' ? "Men's" : state.gender === 'women' ? "Women's" : 'Unisex') + ' ' + TYPE_LABEL[state.type] : TYPE_LABEL[state.type];
-  } else {
-    secTitle.textContent = state.type ? TYPE_LABEL[state.type] : (state.gender ? (state.gender === 'men' ? "Men's Collection" : "Women's Collection") : 'Editorial');
-  }
   renderCatGrid();
+  updateSearchUI();
   demoNote.hidden = !state.isDemo;
   if (state.isDemo && !demoNote.dataset.filled){
     demoNote.innerHTML = '<b>Demo preview.</b> These are sample items so you can see the design. Add your own products from the admin panel — they will replace this automatically.';
@@ -848,6 +958,7 @@ function renderShell(){
 }
 
 function renderProducts(){
+  if (!state.products.length) return; // product ekhono load hoy ni — "Loading…" thakbe
   const list = getFiltered();
   secCount.textContent = `[ ${list.length} ITEM${list.length === 1 ? '' : 'S'} ]`;
   renderGrid(list);
@@ -866,16 +977,23 @@ function orderLink(p, isPre){
   return `https://wa.me/${WA}?text=${encodeURIComponent(text)}`;
 }
 
-function cardHtml(p){
+function cardHtml(p, idx){
   const photos = (Array.isArray(p.photos) && p.photos.length) ? p.photos : [PLACEHOLDER_IMG];
   const multi = photos.length > 1;
   const isPre = p.isPreorder === true;
   const outOfStock = p.inStock === false && !isPre;
   const hasDetails = String(p.description || '').trim() !== '';
+  /* Speed: prothom chobi shathe shathe load hoy (prothom 2 ta card high priority, prothom 4 ta eager, baki lazy).
+     Baki photo gulo (2nd, 3rd...) tokhon-i load hoy jokhon keu swipe/hover kore — shobgulo ek shathe load hoy na. */
+  const imgsHtml = photos.map((url, i) => {
+    const src = esc(optImg(url, 640));
+    if (i === 0) return `<img src="${src}" class="main-img on" alt="${esc(p.name)}"${idx < 2 ? ' fetchpriority="high"' : idx < 4 ? '' : ' loading="lazy"'} decoding="async">`;
+    return `<img data-src="${src}" class="main-img" alt="${esc(p.name)}" decoding="async">`;
+  }).join('');
   return `
   <div class="card">
     <div class="c-img" data-idx="0" data-photos="${esc(JSON.stringify(photos))}">
-      ${photos.map((url,i) => `<img src="${esc(url)}" class="main-img${i===0?' on':''}" alt="${esc(p.name)}" loading="lazy" decoding="async">`).join('')}
+      ${imgsHtml}
       ${isPre ? '<span class="tag tag-pre">Pre-Order</span>' : p.isNewArrival ? '<span class="tag tag-new">New</span>' : '<span class="tag">Premium</span>'}
       ${multi ? `<div class="c-count">1/${photos.length}</div><button type="button" class="c-nav c-prev" aria-label="Previous photo">‹</button><button type="button" class="c-nav c-next" aria-label="Next photo">›</button><div class="c-dots">${photos.map((_,i)=>`<span class="c-dot${i===0?' on':''}" data-i="${i}"></span>`).join('')}</div>` : ''}
     </div>
@@ -900,8 +1018,13 @@ function renderGrid(list){
     grid.innerHTML = `<div class="empty"><h3>No items found</h3><p>Try a different category or search term.</p></div>`;
     return;
   }
-  grid.innerHTML = list.map(cardHtml).join('');
-  observe();
+  grid.innerHTML = list.map((p, i) => cardHtml(p, i)).join('');
+  if (isSearching()){
+    // Search result shathe shathe dekhabe (fade-in-er jonno wait korbe na)
+    grid.querySelectorAll('.card').forEach(c => c.classList.add('vis'));
+  } else {
+    observe();
+  }
 }
 
 let obs;
@@ -927,16 +1050,31 @@ grid.addEventListener('click', (e) => {
 });
 
 /* ---------------- Multi-photo carousel ---------------- */
+function loadImg(img){
+  if (img && img.dataset.src){ img.src = img.dataset.src; img.removeAttribute('data-src'); }
+}
+/* pasher duto photo age thekei load kore rakhe, jate swipe korle chobi shathe shathe ashe */
+function warmCard(cImg){
+  const imgs = cImg.querySelectorAll('.main-img');
+  const total = imgs.length;
+  if (total < 2) return;
+  const idx = Number(cImg.dataset.idx || 0);
+  loadImg(imgs[(idx + 1) % total]);
+  loadImg(imgs[(idx - 1 + total) % total]);
+}
+
 function setActivePhoto(cImg, idx){
   const imgs = cImg.querySelectorAll('.main-img');
   const total = imgs.length;
   if (!total) return;
   idx = ((idx % total) + total) % total;
+  loadImg(imgs[idx]);
   imgs.forEach((img,i) => img.classList.toggle('on', i === idx));
   cImg.querySelectorAll('.c-dot').forEach((d,i) => d.classList.toggle('on', i === idx));
   const countEl = cImg.querySelector('.c-count');
   if (countEl) countEl.textContent = `${idx+1}/${total}`;
   cImg.dataset.idx = idx;
+  warmCard(cImg);
 }
 
 let gallerySwiped = false;
@@ -963,9 +1101,15 @@ grid.addEventListener('click', (e) => {
   if (photosArr.length) openLightbox(photosArr, Number(cImg.dataset.idx || 0));
 });
 
+grid.addEventListener('mouseover', (e) => {
+  const cImg = e.target.closest('.c-img');
+  if (cImg) warmCard(cImg);
+}, { passive: true });
+
 grid.addEventListener('touchstart', (e) => {
   const cImg = e.target.closest('.c-img');
   galleryTouchX = cImg ? e.touches[0].clientX : null;
+  if (cImg) warmCard(cImg);
 }, { passive: true });
 
 grid.addEventListener('touchend', (e) => {
@@ -990,7 +1134,7 @@ function openLightbox(photosArr, index){
   lightbox.classList.add('open'); document.body.style.overflow = 'hidden';
 }
 function renderLightbox(){
-  lbImg.src = lbPhotos[lbIndex];
+  lbImg.src = optImg(lbPhotos[lbIndex], 1400);
   const multi = lbPhotos.length > 1;
   lbCounter.textContent = `${lbIndex+1} / ${lbPhotos.length}`;
   lbCounter.style.display = multi ? 'block' : 'none';
@@ -1055,7 +1199,7 @@ function detailsHtml(text){
 
 function setDetailsPhoto(i){
   dtIndex = ((i % dtPhotos.length) + dtPhotos.length) % dtPhotos.length;
-  dtHeroImg.src = dtPhotos[dtIndex];
+  dtHeroImg.src = optImg(dtPhotos[dtIndex], 900);
   dtThumbs.querySelectorAll('.dt-thumb').forEach((t, n) => t.classList.toggle('on', n === dtIndex));
 }
 
@@ -1076,7 +1220,7 @@ function openDetails(p, trigger){
       : p.isNewArrival ? '<span class="dt-chip">New</span>' : '');
   dtSpecs.innerHTML = detailsHtml(p.description);
   dtThumbs.innerHTML = dtPhotos.length > 1
-    ? dtPhotos.map((u, i) => `<button type="button" class="dt-thumb" data-i="${i}" aria-label="Photo ${i + 1}"><img src="${esc(u)}" alt="" loading="lazy"></button>`).join('')
+    ? dtPhotos.map((u, i) => `<button type="button" class="dt-thumb" data-i="${i}" aria-label="Photo ${i + 1}"><img src="${esc(optImg(u, 120))}" alt="" loading="lazy"></button>`).join('')
     : '';
   dtActions.innerHTML = `
     <button type="button" class="bag-add-btn" data-dt-add ${outOfStock ? 'disabled' : ''}>+ Add to Bag</button>
@@ -1171,7 +1315,7 @@ function showAddedToast(product){
   const el = document.createElement('div');
   el.className = 'toast';
   el.innerHTML = `
-    <img src="${esc((product.photos && product.photos[0]) || PLACEHOLDER_IMG)}" alt="">
+    <img src="${esc(optImg((product.photos && product.photos[0]) || PLACEHOLDER_IMG, 100))}" alt="">
     <div class="toast-text"><b>${esc(product.name)}</b><span>Added to your bag</span></div>
     <button type="button" class="toast-action">View Bag</button>
   `;
@@ -1235,7 +1379,7 @@ function renderCartPanel(){
   } else {
     wrap.innerHTML = state.cart.map(i => `
       <div class="cart-line">
-        <img class="cart-line-img" src="${esc(i.photo || PLACEHOLDER_IMG)}" alt="">
+        <img class="cart-line-img" src="${esc(optImg(i.photo || PLACEHOLDER_IMG, 140))}" alt="">
         <div class="cart-line-info">
           <div class="cart-line-name">${esc(i.name)}</div>
           <div class="cart-line-meta">${i.brand ? esc(i.brand) + ' · ' : ''}${esc(i.price)}${i.qty > 1 ? ' × ' + i.qty : ''}${i.pre ? ' · <span class="cart-pre">Pre-Order</span>' : ''}</div>
@@ -1285,6 +1429,21 @@ window.addEventListener('scroll', () => {
   bttTicking = true;
   requestAnimationFrame(() => { btt.classList.toggle('show', scrollY > 600); bttTicking = false; });
 }, { passive: true });
+
+/* ---------------- START ----------------
+   Age page ta (hero + category chobi + bag) shathe shathe dekhay, Firebase-er jonno wait kore na.
+   Cache thakle product gulo-o shathe shathe dekhay. Tarpor Firebase theke notun data ene update kore. */
+state.search = searchInput.value;
+searchClear.hidden = searchInput.value === '';
+try {
+  const cachedRaw = localStorage.getItem(CACHE_KEY) || '';
+  const cached = cachedRaw ? JSON.parse(cachedRaw) : null;
+  if (Array.isArray(cached) && cached.length){ state.products = cached; lastSig = cachedRaw; }
+} catch (err) { lastSig = ''; }
+renderShell();
+renderCartBadge();
+if (state.products.length) renderProducts();
+boot();
 </script>
 </body>
 </html>
