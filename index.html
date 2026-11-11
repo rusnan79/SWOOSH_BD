@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
 <title>SWOOSH | Premium Imports</title>
+<!-- Prothom screen-er chobi gulo page khulei download shuru hoy -->
+<link rel="preload" as="image" href="logo-black.png" fetchpriority="high">
+<link rel="preload" as="image" href="men.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="women.jpg" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant:ital,wght@1,600;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -119,7 +123,7 @@ footer{ text-align:center; padding:36px 20px; border-top:1px solid var(--line); 
 <div class="hero">
   <div class="hero-main">
     <div class="hero-eyebrow">Imported · Premium · Nationwide Delivery</div>
-    <img src="logo-black.png" alt="SWOOSH logo" class="hero-logo">
+    <img src="logo-black.png" alt="SWOOSH logo" class="hero-logo" fetchpriority="high" decoding="async">
     <h1 class="hero-brand">SWOOSH</h1>
     <p class="hero-tag">Nike, Adidas, Gucci, Louis Vuitton, Dior, Chanel, Asics &amp; Balenciaga — sourced abroad, delivered across Bangladesh and to students overseas.</p>
     <div class="hero-ctas">
@@ -133,10 +137,10 @@ footer{ text-align:center; padding:36px 20px; border-top:1px solid var(--line); 
 <section class="cat-section">
   <h2 class="cat-eyebrow">Shop by Category</h2>
   <div class="cat-grid" id="catGrid">
-    <a class="cat-tile" href="shop.html?gender=men"><img id="tileMen" src="" alt="Men"><span class="cat-tile-label">Men</span></a>
-    <a class="cat-tile" href="shop.html?gender=women"><img id="tileWomen" src="" alt="Women"><span class="cat-tile-label">Women</span></a>
-    <a class="cat-tile" href="shop.html?type=sunglasses"><img id="tileSunglasses" src="" alt="Sunglasses"><span class="cat-tile-label">Sunglasses</span></a>
-    <a class="cat-tile" href="shop.html?type=umbrellas"><img id="tileUmbrellas" src="" alt="Umbrellas"><span class="cat-tile-label">Umbrellas</span></a>
+    <a class="cat-tile" href="shop.html?gender=men"><img id="tileMen" src="men.jpg" alt="Men" fetchpriority="high" decoding="async"><span class="cat-tile-label">Men</span></a>
+    <a class="cat-tile" href="shop.html?gender=women"><img id="tileWomen" src="women.jpg" alt="Women" fetchpriority="high" decoding="async"><span class="cat-tile-label">Women</span></a>
+    <a class="cat-tile" href="shop.html?type=sunglasses"><img id="tileSunglasses" src="sunglass.jpg" alt="Sunglasses" decoding="async"><span class="cat-tile-label">Sunglasses</span></a>
+    <a class="cat-tile" href="shop.html?type=umbrellas"><img id="tileUmbrellas" src="umbrella.jpg" alt="Umbrellas" decoding="async"><span class="cat-tile-label">Umbrellas</span></a>
   </div>
 </section>
 
@@ -149,29 +153,28 @@ footer{ text-align:center; padding:36px 20px; border-top:1px solid var(--line); 
   <p class="f-copy">&copy; 2026 SWOOSH — All Rights Reserved</p>
 </footer>
 
-<script type="module">
-'use strict';
-
-function svgPlaceholder(label, tone){
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400"><rect fill="${tone}" width="300" height="400"/><rect x="14" y="14" width="272" height="372" fill="none" stroke="rgba(10,10,10,.2)" stroke-width="2"/><text x="150" y="208" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="22" fill="rgba(10,10,10,.62)" text-anchor="middle">${label}</text></svg>`;
-  return 'data:image/svg+xml,' + encodeURIComponent(svg);
-}
-
-// Niche apnar nijossho chobir link gulo bosiye din
-const FIXED_IMAGES = {
-  men: 'men.jpg',
-  women: 'women.jpg',
-  sunglasses: 'sunglass.jpg',
-  umbrellas: 'umbrella.jpg'
-};
-
-// Chobi thakle chobi dekhabe, na thakle ager moto color block dekhabe
-document.getElementById('tileMen').src = FIXED_IMAGES.men || svgPlaceholder('Men', '#EDEDE8');
-document.getElementById('tileWomen').src = FIXED_IMAGES.women || svgPlaceholder('Women', '#EFECE6');
-document.getElementById('tileSunglasses').src = FIXED_IMAGES.sunglasses || svgPlaceholder('Sunglasses', '#E9E6E0');
-document.getElementById('tileUmbrellas').src = FIXED_IMAGES.umbrellas || svgPlaceholder('Umbrellas', '#E8E5DF');
-
-// Note: index page-e ekhon fixed chobi thakay Firebase theke auto-fetch korar code ti bad deya hoyeche.
+<script>
+/* Chobi gulo ekhon HTML-e shorashori boshano (JS-er opekkha kore na), tai ager cheye onek fast dekhay.
+   Kono chobi load na hole shudhu tokhon color block dekhabe. */
+(function(){
+  function ph(label, tone){
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400"><rect fill="' + tone + '" width="300" height="400"/><rect x="14" y="14" width="272" height="372" fill="none" stroke="rgba(10,10,10,.2)" stroke-width="2"/><text x="150" y="208" font-family="Georgia,serif" font-style="italic" font-weight="700" font-size="22" fill="rgba(10,10,10,.62)" text-anchor="middle">' + label + '</text></svg>';
+    return 'data:image/svg+xml,' + encodeURIComponent(svg);
+  }
+  var tiles = [
+    ['tileMen', 'Men', '#EDEDE8'],
+    ['tileWomen', 'Women', '#EFECE6'],
+    ['tileSunglasses', 'Sunglasses', '#E9E6E0'],
+    ['tileUmbrellas', 'Umbrellas', '#E8E5DF']
+  ];
+  tiles.forEach(function(t){
+    var img = document.getElementById(t[0]);
+    if (!img) return;
+    function fallback(){ img.onerror = null; img.src = ph(t[1], t[2]); }
+    img.onerror = fallback;
+    if (img.complete && img.naturalWidth === 0) fallback();
+  });
+})();
 </script>
 
 </body>
